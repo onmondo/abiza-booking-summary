@@ -1,0 +1,28 @@
+.container {
+    border: 0.05rem solid #777;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    text-align: center;
+    background-color: #777;
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.container:hover {
+    border-color:#8a8787;
+    background-color: #8a8787;
+}
+
+.container.main {
+    border: 0.05rem solid hsl(283, 64%, 50%);
+    background-color: hsl(283, 64%, 50%);
+    color: white;
+}
+
+.container.main:hover {
+    border-color:hsl(283, 86%, 65%);
+    background-color: hsl(283, 86%, 65%);
+    color: white;
+}

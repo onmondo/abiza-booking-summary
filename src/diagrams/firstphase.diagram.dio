@@ -1,0 +1,16 @@
+<mxfile host="65bd71144e">
+    <diagram id="Xwds0YerkXa2a8TxfWpL" name="Page-1">
+        <mxGraphModel dx="1370" dy="787" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="13" value="&lt;h1&gt;First Phase&lt;/h1&gt;&lt;p&gt;1. Decide which cloud platform to use that has ability to store atleast 1 to 2 users with OAuth&amp;nbsp; 2.0 features and has atleast 1 mail server to send OTPs.&lt;/p&gt;&lt;p&gt;2. Create registration endpoints with OTP verification and submition of profile.&lt;/p&gt;&lt;p&gt;3. Implement OAuth 2.0 for authentication of users (2 users only)&lt;/p&gt;&lt;p&gt;Update&lt;/p&gt;&lt;p&gt;No OTP needed, Clerk will be the one to authenticate users directly from your React project&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="520" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="auth server for authentication &lt;br&gt;leveraging Clerk.com" style="html=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="290" width="180" height="90" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import styles from "./select.module.css"
+import { SolarBedBroken } from "../bedicon"
 
 export type SelectOption = {
     label: string
@@ -64,7 +65,8 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
             tabIndex={0} 
             className={styles.container}
         >
-            <h4 className={styles.value}>
+            <SolarBedBroken />
+            <h6 className={styles.value}>
                 {
                     multiple 
                     ? (
@@ -84,6 +86,7 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
                                     >                                        
                                         <small className={styles["remove-btn"]}>
                                             {v.label}
+                                            &nbsp;
                                             &times;
                                         </small>
                                     </button>
@@ -95,7 +98,7 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
                     :
                         value?.label
                 }
-            </h4>
+            </h6>
             <button onClick={clearOptions} className={styles["clear-btn"]}>&times;</button>
             <small className={styles.divider}></small>
             <small className={styles.caret}></small>

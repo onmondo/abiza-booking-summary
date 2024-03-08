@@ -1,7 +1,12 @@
 import { useState } from "react"
-import { Select, SelectOption } from "./components/select"
+import { SelectOption } from "./components/select"
 import { MultiSelect } from "./components/multiselect"
+import { Temporal } from "@js-temporal/polyfill"
 import "./main.css"
+import { Button } from "./components/button"
+import { UserTextBox } from "./components/usertextbox"
+import { BookingFrom } from "./components/bookingfrom"
+import { CashTextBox } from "./components/cashtextbox"
 
 const options: SelectOption[] = [
   { label: "Please select one...", value: "placeholder" },
@@ -11,21 +16,27 @@ const options: SelectOption[] = [
 
 
 function App() {
-  const [value, setValue] = useState<SelectOption>(options[0])
+  // const [value, setValue] = useState<SelectOption>(options[0])
   const [values, setValues] = useState<SelectOption[]>([])
   console.log(values)
+
+  const now = Temporal.Now.plainDateISO()
   return (
-    <>
-      <Select options={options} value={value} onChange={val => {
-          const value = val as SelectOption
-          setValue(value)
-        }}/>
+    <main>
+      <h1>{now.add({days: 1}).toString()}</h1>
+      <UserTextBox />
+      <br />
+      <BookingFrom />
+      <br />
+      <CashTextBox />
       <br />
       <MultiSelect multiple={true} options={options} value={values} onChange={val => {
           const values = val as SelectOption[]
           setValues(values)
         }}/>
-    </>
+        <br />
+      <Button name={"Confirm to continue"} isMain={true} />
+    </main>
   )
 }
 
