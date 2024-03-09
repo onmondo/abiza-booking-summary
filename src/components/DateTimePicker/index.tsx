@@ -7,14 +7,17 @@ import moment from "moment";
 
 
 export function DateTimePicker() {
-
-    const monthOptions: SelectOption[] = moment.months().map(month => {return { label: month, value: month }})
-
-    const [month, setMonth] = useState<SelectOption>(monthOptions[moment().month()]);
+    const [month, setMonth] = useState<SelectOption>();
     const [day, setDay] = useState<SelectOption>();
     const [year, setYear] = useState<SelectOption>();
+    const [monthOptions, setMonthOptions] = useState<SelectOption[]>([]);
     const [dayOptions, setDayOptions] = useState<SelectOption[]>([]);
     const [yearOptions, setYearOptions] = useState<SelectOption[]>([]);
+
+    const populateMonthOptions = () => {
+        const monthOptions: SelectOption[] = moment.months().map(month => {return { label: month, value: month }})
+        setMonthOptions(monthOptions)
+    }
 
     const populateDayOptions = (currentMonthYear: string) => {
         const numOfDays: number = parseInt(moment(currentMonthYear).daysInMonth().toString());
@@ -41,6 +44,7 @@ export function DateTimePicker() {
 
     useEffect(() => {
         const currentMonthYear = moment().format("YYYY-MM")
+        populateMonthOptions()
         populateDayOptions(currentMonthYear)
         populateYearOptions(currentMonthYear)
         // const day = dayOptions.find(dayOption => dayOption.value === moment(currentMonthYear).day().toString())
@@ -72,7 +76,11 @@ export function DateTimePicker() {
         <section className={styles.container}>
             <SolarCalendarDateLinear />
             <Select 
-                value={month} 
+                value={
+                    (month) 
+                    ? month 
+                    : monthOptions.find(monthOption => monthOption.value === moment().format("MMMM"))
+                } 
                 options={monthOptions} 
                 onChange={handleMonthOnChange} 
                 newStyles={selectStyles}

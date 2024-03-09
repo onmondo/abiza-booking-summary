@@ -10,7 +10,12 @@
     border-color:hsl(283, 86%, 65%)
 }
 
-.container > input {
+.paymentmode {
+    width: 100%;
+    text-align: left;
+}
+
+.amount {
     width: 100%;
     text-align: right;
 }

@@ -5,7 +5,8 @@ export function CashTextBox() {
     return (
         <section className={styles.container}>
             <SolarDollarMinimalisticLinear />
-            <input type="number" placeholder="953.00"></input>
+            <input className="paymentmode" type="text" placeholder="Cash, Bank, eWallet . . ."></input>
+            <input className="amount" type="number" placeholder="0.00"></input>
         </section>
     )
 }
