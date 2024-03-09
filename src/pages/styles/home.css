@@ -1,0 +1,36 @@
+main {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    grid-template-rows: repeat(3, 1fr) 0.5fr;
+}
+
+/* main#home {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr) 0.5fr;
+} */
+
+main#home section#booking {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+}
+
+main#home section#bookingform {
+    grid-column: 3 / span 2;
+    grid-row: 1 / span 4;
+}
+
+main#home section#bookingform.show {
+    display: block;
+}
+
+main#home section#bookingform.hide {
+    display: none;
+}
+
+main#home p#addnewbooking {
+    grid-column: 1 / span 2;
+    grid-row: 4;
+    display: grid;
+    justify-items: center;
+}

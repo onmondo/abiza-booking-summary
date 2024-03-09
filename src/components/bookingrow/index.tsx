@@ -44,10 +44,10 @@ export function BookingRow({
             <ul className={`${styles.list} ${styles.roomoccupied}`}>
                 {rooms.map((room, i) => <li key={i}><SolarBedBroken /><small>{room}</small></li>)}
             </ul>
-            <p className={styles.guestname}>
+            <header className={styles.guestname}>
                 <h4>{guestName}</h4>
                 <small className={styles.from}>{bookFrom}</small>
-            </p>
+            </header>
             <ul className={`${styles.list} ${styles.check}`}>
                 <li>in<SolarCalendarDateLinear />{convertedCheckIn}</li>
                 <li>out<SolarCalendarDateLinear />{convertedCheckOut}</li>
@@ -68,10 +68,10 @@ export function BookingRow({
                     <span>{totalPayout}</span>
                 </li>
             </ul>
-            <p className={styles.remarks}>
+            <section className={styles.remarks}>
                 <span><SolarNotebookLinear /></span>
                 <blockquote>{remarks}</blockquote>
-            </p>
+            </section>
         </article>
     )
 }

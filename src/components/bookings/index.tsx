@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BookingRow } from "../../components/bookingrow";
+import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
 
 type SearchBookingRequest = {
@@ -38,7 +38,6 @@ export function Bookings({ year, month }: SearchBookingRequest) {
             });
             const { data } = response;
             setBookings(data.monthlyBookings)
-            console.log("response", data.monthlyBookings);
         } catch(error) {
             const errorDetails = error as Error;
             console.log(errorDetails.message)
@@ -51,7 +50,6 @@ export function Bookings({ year, month }: SearchBookingRequest) {
 
     return (
         <ul className={styles.container}>
-    
         {
             bookings.map(
                 booking => 
