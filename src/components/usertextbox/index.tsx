@@ -1,4 +1,4 @@
-import { SolarUserCircleLinear } from "../usericon";
+import { SolarUserCircleLinear } from "../icons/usericon";
 import styles from "./textbox.module.css";
 
 export function UserTextBox() {

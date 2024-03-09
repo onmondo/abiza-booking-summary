@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SolarCalendarDateLinear } from "../datetimeicon";
+import { SolarCalendarDateLinear } from "../icons/datetimeicon";
 import styles from "./datetime.module.css";
 import selectStyles from "./select.module.css";
 import { Select, SelectOption } from "../select";
@@ -35,7 +35,6 @@ export function DateTimePicker() {
         let year = parseInt(targetYear)
         for(let i = 1; i <= numOfYearsToAdd; i++) {
             year += 1
-            console.log("year", year, i)
             yearOptionCollection.push({ label: year.toString(), value: year.toString()})
         }
         setYearOptions(yearOptionCollection)
@@ -47,9 +46,6 @@ export function DateTimePicker() {
         populateMonthOptions()
         populateDayOptions(currentMonthYear)
         populateYearOptions(currentMonthYear)
-        // const day = dayOptions.find(dayOption => dayOption.value === moment(currentMonthYear).day().toString())
-        console.log("day", dayOptions)
-        // setDay()
     }, [])
 
     const handleMonthOnChange = (val: SelectOption | unknown) => {
@@ -71,7 +67,6 @@ export function DateTimePicker() {
         setYear(value)
     }
 
-    console.log(month, day, year)
     return (
         <section className={styles.container}>
             <SolarCalendarDateLinear />

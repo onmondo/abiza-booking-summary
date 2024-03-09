@@ -19,7 +19,6 @@ const options: SelectOption[] = [
 function App() {
   // const [customvalue, setCustomValue] = useState<SelectOption>(options[0])
   const [values, setValues] = useState<SelectOption[]>([])
-  console.log(values)
 
   const now = Temporal.Now.plainDateISO()
   return (

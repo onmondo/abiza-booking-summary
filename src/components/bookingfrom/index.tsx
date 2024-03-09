@@ -1,4 +1,4 @@
-import { SolarClipboardHeartLinear } from "../bookingicon";
+import { SolarClipboardHeartLinear } from "../icons/bookingicon";
 import styles from "./textbox.module.css";
 
 export function BookingFrom() {

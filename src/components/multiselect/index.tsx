@@ -1,6 +1,6 @@
 import { useState } from "react"
 import styles from "./select.module.css"
-import { SolarBedBroken } from "../bedicon"
+import { SolarBedBroken } from "../icons/bedicon"
 
 export type SelectOption = {
     label: string
