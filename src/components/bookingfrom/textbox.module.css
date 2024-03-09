@@ -6,6 +6,10 @@
     gap: 0.5rem;
 }
 
+.container:hover {
+    border-color:hsl(283, 86%, 65%)
+}
+
 .container > input {
     width: 100%;
 }

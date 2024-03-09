@@ -13,6 +13,7 @@
 .container:hover {
     border-color:#8a8787;
     background-color: #8a8787;
+    transition: all 0.5s ease-out;
 }
 
 .container.main {
@@ -25,4 +26,5 @@
     border-color:hsl(283, 86%, 65%);
     background-color: hsl(283, 86%, 65%);
     color: white;
+    transition: all 0.2s ease-out;
 }

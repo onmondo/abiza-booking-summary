@@ -1,5 +1,5 @@
 import { useState } from "react"
-import styles from "./select.module.css"
+import inheritStyles from "./select.module.css"
 
 export type SelectOption = {
     label: string
@@ -10,9 +10,12 @@ type SelectProps = {
     options: SelectOption[]
     value?: SelectOption
     onChange: (value: SelectOption | unknown) => void
+    newStyles?: CSSModuleClasses
 }
 
-export function Select({ value, onChange, options }: SelectProps) {
+export function Select({ value, onChange, options, newStyles }: SelectProps) {
+    // const customStyles = newStyles as CSSModuleClasses;
+    const styles = (newStyles) ? newStyles : inheritStyles;
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(0)
 
