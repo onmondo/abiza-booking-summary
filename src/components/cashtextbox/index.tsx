@@ -6,17 +6,18 @@ import Big from "big.js";
 import { Select, SelectOption } from "../select";
 
 export function CashTextBox() {
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState("0.00");
     const [paymentOption, setPaymentOption] = useState<SelectOption>()
     const [paymentOptions, setPaymentOptions] = useState<SelectOption[]>([]);
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const amountEntered = Big(event.target.value).toString();
-        setAmount(amountEntered)
+        const numberStr = (event.target.value) ? event.target.value : "0";
+        setAmount(numberStr)
     }
 
     const handleAmountBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-        const amountEntered = Big(event.target.value).toFixed(2);
+        const numberStr = (event.target.value) ? event.target.value : "0.00"
+        const amountEntered = Big(numberStr).toFixed(2);
         setAmount(amountEntered)
     }
 

@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { SelectOption } from "./components/select"
-import { MultiSelect } from "./components/multiselect"
 import { Temporal } from "@js-temporal/polyfill"
 import "./main.css"
 import { Button } from "./components/button"
@@ -8,13 +7,15 @@ import { UserTextBox } from "./components/usertextbox"
 import { BookingFrom } from "./components/bookingfrom"
 import { CashTextBox } from "./components/cashtextbox"
 import { DateTimePicker } from "./components/DateTimePicker"
+import { RoomPicker } from "./components/RoomPicker"
+import { Bookings } from "./pages/bookings"
 
 const options: SelectOption[] = [
   { label: "Please select one...", value: "placeholder" },
   { label: "Room 1", value: "room1" },
-  { label: "Room 2", value: "room2" }
+  { label: "Room 2", value: "room2" },
+  { label: "Attic", value: "attic" },
 ]
-
 
 function App() {
   // const [customvalue, setCustomValue] = useState<SelectOption>(options[0])
@@ -37,12 +38,14 @@ function App() {
           setCustomValue(values)
         }}/>
       <br /> */}
-      <MultiSelect multiple={true} options={options} value={values} onChange={val => {
+      <RoomPicker multiple={true} options={options} value={values} onChange={val => {
           const values = val as SelectOption[]
           setValues(values)
         }}/>
         <br />
       <Button name={"Confirm to continue"} isMain={true} />
+      <br />
+      <Bookings month="January" year="2024"/>
     </main>
   )
 }
