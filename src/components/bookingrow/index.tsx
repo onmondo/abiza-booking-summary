@@ -8,6 +8,7 @@ import { SolarMoonSleepLinear } from "../icons/nightsicon";
 import { SolarNotebookLinear } from "../icons/noteicon";
 import styles from "./row.module.css";
 import Big from "big.js";
+import { SolarClipboardRemoveLinear } from "../icons/removebookingicon";
 
 type BookingDetails = {
     guestName: string
@@ -21,6 +22,7 @@ type BookingDetails = {
     amount: string,
     remarks: string,
     totalAmount: string,
+    onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 export function BookingRow({ 
         guestName, 
@@ -33,14 +35,17 @@ export function BookingRow({
         payment,
         amount,
         remarks,
-        totalAmount
+        totalAmount,
+        onClick
     }: BookingDetails) {
     const convertedCheckIn = moment(checkin).format("YYYY-MM-DD")
     const convertedCheckOut = moment(checkout).format("YYYY-MM-DD")
     const nightlyPrice = Big(amount).toFixed(2);
     const totalPayout = Big(totalAmount).toFixed(2);
+
     return (
         <article className={styles.container}>
+            <a href="#" onClick={(e) => { onClick(e) }} className={styles.actions}><SolarClipboardRemoveLinear /></a>
             <ul className={`${styles.list} ${styles.roomoccupied}`}>
                 {rooms.map((room, i) => <li key={i}><SolarBedBroken /><small>{room}</small></li>)}
             </ul>
@@ -65,7 +70,7 @@ export function BookingRow({
                     <span><SolarDollarMinimalisticLinear /></span>
                     <span>{payment}</span>
                     <span>{nightlyPrice}</span>
-                    <span>{totalPayout}</span>
+                    <strong>{totalPayout}</strong>
                 </li>
             </ul>
             <section className={styles.remarks}>
