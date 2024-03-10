@@ -5,7 +5,8 @@ import styles from "./bookinglist.module.css";
 
 type SearchBookingRequest = {
     year: string
-    month: string
+    month: string,
+    bookingFormStatus: boolean
 }
 
 type BookingResponse = {
@@ -24,7 +25,7 @@ type BookingResponse = {
     totalPayout: number
 }
 
-export function Bookings({ year, month }: SearchBookingRequest) {
+export function Bookings({ year, month, bookingFormStatus }: SearchBookingRequest) {
     const [bookings, setBookings] = useState<BookingResponse[]>([])
     const fetchBookings = async () => {
         const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${year}/${month}?sort=asc`;
@@ -46,7 +47,7 @@ export function Bookings({ year, month }: SearchBookingRequest) {
 
     useEffect(() => {
         fetchBookings();
-    }, [])
+    }, [bookingFormStatus])
 
     return (
         <ul className={styles.container}>

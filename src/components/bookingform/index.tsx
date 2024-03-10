@@ -51,15 +51,11 @@ export function BookingForm({ toggleForm }: BookingFormProps) {
 
     const postNewBooking = async () => {
         const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings`;
-        
-        console.log('checkedIn', checkedIn)
-        console.log('checkedOut', checkedOut)
-        console.log('datePaid', datePaid)
+
         const formatCheckIn = moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
         const formatChackOut = moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
         const datePaidMonth = moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
         const newBooking = {
-            // guestName: newGuest?.guestName,
             guestName: newGuest?.guestName,
             rooms: roomPicked.map(room => room.value),
             checkIn: formatCheckIn,
