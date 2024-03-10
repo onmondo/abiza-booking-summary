@@ -1,18 +1,20 @@
-import { SolarUserCircleLinear } from "../icons/usericon";
+import { SolarNotebookLinear } from "../icons/noteicon";
 import styles from "./textbox.module.css";
 
-type UserText = {
+type RemarksText = {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    placeholder: string
 }
 
-export function UserTextBox({onChange }: UserText) {
+export function TextBox({ onChange, placeholder }: RemarksText) {
+
     return (
         <section className={styles.container}>
-            <SolarUserCircleLinear />
-            <input 
+            <SolarNotebookLinear />
+            <input className={styles.guest}
                 type="text" 
                 maxLength={50} 
-                placeholder="Guest's name"
+                placeholder={placeholder}
                 onChange={onChange}
             />
         </section>

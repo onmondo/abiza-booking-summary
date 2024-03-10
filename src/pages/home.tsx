@@ -6,12 +6,14 @@ import { BookingForm } from "../components/bookingform";
 
 export function Home() {
     const [showNewBookingForm, setShowNewBookingForm] = useState(false);
-    
+    // Use context here for toggling the entry and modification form
     return (
         <main id="home">
-            <section id="booking"><Bookings month="January" year="2024"/></section>
+            <section id="booking">
+                <Bookings month="January" year="2024"/>
+            </section>
             <section id="bookingform" className={`${(showNewBookingForm) ? "show" : "hide"}`}>
-                <BookingForm />
+                <BookingForm toggleForm={setShowNewBookingForm} />
             </section>
             <p id="addnewbooking">
                 <Button 

@@ -2,10 +2,13 @@ import { SolarClipboardHeartLinear } from "../icons/bookingicon";
 import styles from "./textbox.module.css";
 
 type BookingFromText = {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: (val: string) => void
 }
 
 export function BookingFrom({ onChange }: BookingFromText) {
+    function handleOnChangeBooking(val: string) {
+        onChange(val)
+    }
     return (
         <section className={styles.container}>
             <SolarClipboardHeartLinear />
@@ -13,7 +16,7 @@ export function BookingFrom({ onChange }: BookingFromText) {
                 type="text"
                 maxLength={50} 
                 placeholder="Agoda, walk-in . . ." 
-                onChange={onChange}
+                onChange={(e) => { handleOnChangeBooking(e.target.value) }}
             />
         </section>
     )

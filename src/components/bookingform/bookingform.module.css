@@ -2,4 +2,11 @@
     background-color: white;
     padding: 2rem;
     box-shadow: 0px 3px 9px 0px #8888;
+    width: 21rem;
+    border-radius: 1rem;
+}
+
+.decide {
+    display: flex;
+    gap: 1rem;
 }

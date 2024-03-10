@@ -4,24 +4,24 @@ import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
 
 type SearchBookingRequest = {
-    year: string,
-    month: string,
+    year: string
+    month: string
 }
 
 type BookingResponse = {
-    _id: string,
-    guestName: string,
-    bookFrom: string,
-    rooms: string[],
-    checkIn: string,
-    checkOut: string,
-    datePaid: string,
-    nightlyPrice: number,
-    noOfPax: number,
-    noOfStay: number,
-    remarks: string,
-    modeOfPayment: string,
-    totalPayout: number,
+    _id: string
+    guestName: string
+    from: string
+    rooms: string[]
+    checkIn: string
+    checkOut: string
+    datePaid: string
+    nightlyPrice: number
+    noOfPax: number
+    noOfStay: number
+    remarks: string
+    modeOfPayment: string
+    totalPayout: number
 }
 
 export function Bookings({ year, month }: SearchBookingRequest) {
@@ -56,7 +56,7 @@ export function Bookings({ year, month }: SearchBookingRequest) {
                 <li key={booking._id}>
                     <BookingRow 
                         guestName={booking.guestName}
-                        bookFrom={booking.bookFrom}
+                        bookFrom={booking.from}
                         rooms={booking.rooms}
                         checkin={booking.checkIn}
                         checkout={booking.checkOut}

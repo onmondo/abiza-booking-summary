@@ -5,6 +5,7 @@
     display: grid;
     grid-template-columns: 0.5fr repeat(9, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    width: 32rem;
     /* gap: 0.5rem; */
 }
 
