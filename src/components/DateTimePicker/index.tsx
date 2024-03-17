@@ -4,12 +4,14 @@ import styles from "./datetime.module.css";
 import selectStyles from "./select.module.css";
 import { Select, SelectOption } from "../select";
 import moment from "moment";
+import { ISODateText } from "../bookingformModal";
 
 type ChangeDateRequest = {
+    value: ISODateText
     onChange: <T>(val: T) => void
 }
 
-export function DateTimePicker({ onChange }: ChangeDateRequest) {
+export function DateTimePicker({ value, onChange }: ChangeDateRequest) {
     const [month, setMonth] = useState<SelectOption>();
     const [day, setDay] = useState<SelectOption>();
     const [year, setYear] = useState<SelectOption>();
@@ -103,13 +105,27 @@ export function DateTimePicker({ onChange }: ChangeDateRequest) {
         <section className={styles.container}>
             <SolarCalendarDateLinear />
             <Select 
-                value={month}
+                value={
+                    (value?.month) 
+                        ? monthOptions.find((month) => {
+                            const selectedMonth = moment(value.month);
+                            return month.value === selectedMonth.format("MMMM")
+                        }) 
+                        : month
+                }
                 options={monthOptions} 
                 onChange={(v) => handleMonthOnChange(v) }
                 newStyles={selectStyles}
             />
             <Select 
-                value={day}
+                value={
+                    (value?.day) 
+                        ? dayOptions.find((day) => {
+                            const selectedDay = moment(value.day);
+                            return day.value === selectedDay.format("D")
+                        }) 
+                        : day
+                }                
                 options={dayOptions} 
                 onChange={(v) => handleDayOnChange(v) } 
                 newStyles={selectStyles}

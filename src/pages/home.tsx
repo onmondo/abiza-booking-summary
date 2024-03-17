@@ -5,29 +5,45 @@ import "./styles/home.css";
 import { BookingForm } from "../components/bookingformModal";
 
 export function Home() {
-    const [showNewBookingForm, setShowNewBookingForm] = useState(false);
+    const [showBookingForm, setShowBookingForm] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState({});
+    const [isNewBooking, setIsNewBooking] = useState(false);
     // Use context here for toggling the entry and modification form
     // console.log("showNewBookingForm", showNewBookingForm)
 
     function handleSelectBooking (booking: BookingResponse) {
+        setIsNewBooking(false);
         setSelectedBooking(booking);
-        setShowNewBookingForm(!showNewBookingForm);
+        setShowBookingForm(!showBookingForm);
     }
 
     return (
         <main id="home">
             <section id="booking">
-                <Bookings month="January" year="2024" bookingFormStatus={showNewBookingForm} selectBooking={handleSelectBooking} />
+                <Bookings 
+                    month="January" 
+                    year="2024" 
+                    bookingFormStatus={showBookingForm} 
+                    selectBooking={handleSelectBooking} 
+                />
             </section>
-            <section id="bookingform" className={`${(showNewBookingForm) ? "show" : "hide"}`}>
-                <BookingForm isShown={showNewBookingForm} booking={selectedBooking as BookingResponse} toggleForm={setShowNewBookingForm} />
+            <section id="bookingform" className={`${(showBookingForm) ? "show" : "hide"}`}>
+                <BookingForm 
+                    newBooking={isNewBooking}
+                    isShown={(showBookingForm)} 
+                    booking={selectedBooking as BookingResponse} 
+                    toggleForm={setShowBookingForm} 
+                />
             </section>
             <p id="addnewbooking">
                 <Button 
                     name={"Add more"} 
                     isMain={true} 
-                    onClick={() => { setShowNewBookingForm(!showNewBookingForm) }}
+                    onClick={(e) => { 
+                        e.preventDefault();
+                        setShowBookingForm(!showBookingForm);
+                        setIsNewBooking(true);
+                    }}
                 />
             </p>
         </main>

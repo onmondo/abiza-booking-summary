@@ -30,12 +30,13 @@ export type ISODateText = {
 }
 
 type BookingFormProps = {
+    newBooking: boolean
     isShown: boolean
     booking: BookingResponse
     toggleForm: Dispatch<SetStateAction<boolean>>
 }
 
-export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) {
+export function BookingForm({ newBooking, isShown, toggleForm, booking }: BookingFormProps) {
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
         { label: "Room 1", value: "room1" },
@@ -109,13 +110,17 @@ export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) 
         <form className={styles.container}>
             {/* <h1>{now.add({days: 1}).toString()}</h1> */}
             <UserTextBox 
-                value={(isShown) 
+                value={(isShown && !newBooking) 
                     ? { 
                         guestName: booking.guestName,
                         stay: booking.noOfStay.toString(),
                         pax: booking.noOfPax.toString(),
                     }
-                    : {}
+                    : {                        
+                        guestName: "",
+                        stay: "",
+                        pax: ""
+                    }
                 } 
                 onChange={val => {
                 setNewGuest({...newGuest, ...val})
@@ -123,7 +128,7 @@ export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) 
             />
             <br />
             <BookingFrom 
-                value={(isShown) 
+                value={(isShown && !newBooking) 
                     ? booking.from
                     : ""
                 }
@@ -131,15 +136,42 @@ export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) 
                 setBookedFrom(val);
             }}/>
             <br />
-            <DateTimePicker onChange={val => { 
+            <DateTimePicker 
+                value={(isShown && !newBooking) 
+                    ? {
+                        month: booking.checkIn,
+                        day: booking.checkIn,
+                        year: booking.checkIn,
+                    }
+                    : {
+                        month: "",
+                        day: "",
+                        year: ""
+                    }
+                }
+                onChange={val => { 
                 setCheckedIn({ ...checkedIn, ...val }) 
             }}/>
             <br />
-            <DateTimePicker onChange={val => { 
+            <DateTimePicker 
+                value={(isShown && !newBooking) 
+                    ? {
+                        month: booking.checkOut,
+                        day: booking.checkOut,
+                        year: booking.checkOut,
+                    }
+                    : {
+                        month: "",
+                        day: "",
+                        year: ""
+                    }
+                }
+                onChange={val => { 
                 setCheckedOut({ ...checkedOut, ...val}) 
             }}/>
             <br />
-            <CashTextBox onChange={val => {
+            <CashTextBox 
+                onChange={val => {
                 setPaymentDetails({ ...paymentDetails, ...val })
             }} />
             <br />
@@ -148,7 +180,20 @@ export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) 
                 setRoomPicked(values)
                 }}/>
             <br />
-            <DateTimePicker onChange={val => { 
+            <DateTimePicker 
+                value={(isShown && !newBooking) 
+                    ? {
+                        month: booking.datePaid,
+                        day: booking.datePaid,
+                        year: booking.datePaid,
+                    }
+                    : {
+                        month: "",
+                        day: "",
+                        year: ""
+                    }
+                }
+                onChange={val => { 
                 setDatePaid({ ...datePaid, ...val }) 
             }}/>
             <br />
