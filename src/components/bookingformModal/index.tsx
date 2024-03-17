@@ -74,7 +74,6 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
             remarks: remarks,
         }
 
-        // console.log(newBooking);
         try {
             await axios.post(apiUrl, newBooking, {
                 headers: {

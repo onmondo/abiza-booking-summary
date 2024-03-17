@@ -5,7 +5,6 @@ import { SolarSleepingLinear } from "../icons/bedpaxicon";
 import { SolarDollarMinimalisticLinear } from "../icons/cashicon";
 import { SolarCalendarDateLinear } from "../icons/datetimeicon";
 import { SolarMoonSleepLinear } from "../icons/nightsicon";
-import { SolarNotebookLinear } from "../icons/noteicon";
 import styles from "./row.module.css";
 import Big from "big.js";
 import { SolarClipboardRemoveLinear } from "../icons/removebookingicon";
@@ -74,7 +73,6 @@ export function BookingRow({
                 </li>
             </ul>
             <section className={styles.remarks}>
-                <span><SolarNotebookLinear /></span>
                 <blockquote>{remarks}</blockquote>
             </section>
         </article>
