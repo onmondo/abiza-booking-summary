@@ -21,7 +21,7 @@ export function Home() {
                 <Bookings month="January" year="2024" bookingFormStatus={showNewBookingForm} selectBooking={handleSelectBooking} />
             </section>
             <section id="bookingform" className={`${(showNewBookingForm) ? "show" : "hide"}`}>
-                <BookingForm booking={selectedBooking as BookingResponse} toggleForm={setShowNewBookingForm} />
+                <BookingForm isShown={showNewBookingForm} booking={selectedBooking as BookingResponse} toggleForm={setShowNewBookingForm} />
             </section>
             <p id="addnewbooking">
                 <Button 

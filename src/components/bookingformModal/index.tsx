@@ -30,11 +30,12 @@ export type ISODateText = {
 }
 
 type BookingFormProps = {
+    isShown: boolean
     booking: BookingResponse
     toggleForm: Dispatch<SetStateAction<boolean>>
 }
 
-export function BookingForm({ toggleForm, booking }: BookingFormProps) {
+export function BookingForm({ isShown, toggleForm, booking }: BookingFormProps) {
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
         { label: "Room 1", value: "room1" },
@@ -108,17 +109,25 @@ export function BookingForm({ toggleForm, booking }: BookingFormProps) {
         <form className={styles.container}>
             {/* <h1>{now.add({days: 1}).toString()}</h1> */}
             <UserTextBox 
-                value={{ 
-                    guestName: booking.guestName,
-                    stay: booking.noOfStay.toString(),
-                    pax: booking.noOfPax.toString(),
-                }} 
+                value={(isShown) 
+                    ? { 
+                        guestName: booking.guestName,
+                        stay: booking.noOfStay.toString(),
+                        pax: booking.noOfPax.toString(),
+                    }
+                    : {}
+                } 
                 onChange={val => {
                 setNewGuest({...newGuest, ...val})
             }}
             />
             <br />
-            <BookingFrom onChange={val => {
+            <BookingFrom 
+                value={(isShown) 
+                    ? booking.from
+                    : ""
+                }
+                onChange={val => {
                 setBookedFrom(val);
             }}/>
             <br />
