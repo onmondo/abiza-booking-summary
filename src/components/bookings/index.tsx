@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
 import { RemoveBooking } from "../deleteBookingModal";
@@ -88,14 +88,7 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
             {
                 bookings.map(
                     booking => 
-                    <li 
-                        key={booking._id} 
-                        // onClick={(e) => { 
-                        //     e.preventDefault(); 
-                        //     selectBooking(booking);
-                        // }
-                    // }
-                    >
+                    <li key={booking._id}>
                         <BookingRow
                             removeBooking={(e) => { 
                                 e.preventDefault();

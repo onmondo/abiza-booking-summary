@@ -4,12 +4,14 @@ import styles from "./textbox.module.css";
 import selectStyles from "./select.module.css";
 import Big from "big.js";
 import { Select, SelectOption } from "../select";
+import { PaymentDetails } from "../bookingformModal";
 
 type ChangePayRequest = {
+    value: PaymentDetails
     onChange: <T>(val: T) => void
 }
 
-export function CashTextBox({ onChange }: ChangePayRequest) {
+export function CashTextBox({ value, onChange }: ChangePayRequest) {
     const [amount, setAmount] = useState<string>();
     const [total, setTotal] = useState<string>();
     const [paymentOption, setPaymentOption] = useState<SelectOption>()
@@ -62,14 +64,18 @@ export function CashTextBox({ onChange }: ChangePayRequest) {
         <section className={styles.container}>
             <SolarDollarMinimalisticLinear />
             <Select 
-                value={paymentOption}
+                value={
+                    (value?.paymentMode)
+                        ? paymentOptions.find((paymentOption) => paymentOption.value === value.paymentMode)
+                        :paymentOption
+                }
                 options={paymentOptions} 
                 onChange={(v) => { handlePaymentOnChange(v) }} 
                 newStyles={selectStyles}
             />
             <input 
                 type="number" 
-                value={amount}
+                value={(value.amount) ? value.amount : amount}
                 placeholder="Nightly price" 
                 onBlur={(e) => { handleAmountBlur({ amount: e.target.value }) }}
                 onChange={(e) => { handleAmountChange({ amount: e.target.value }) }}
@@ -79,7 +85,7 @@ export function CashTextBox({ onChange }: ChangePayRequest) {
             />
             <input 
                 type="number" 
-                value={total}
+                value={(value.totalPayout) ? value.totalPayout : total}
                 placeholder="Total payout" 
                 onBlur={(e) => { handleTotalBlur({ totalPayout: e.target.value }) }}
                 onChange={(e) => { handleTotalChange({ totalPayout: e.target.value }) }}

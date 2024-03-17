@@ -11,7 +11,7 @@ import { TextBox } from "../textbox";
 import moment from "moment";
 import { BookingResponse } from "../bookings";
 
-type PaymentDetails = {
+export type PaymentDetails = {
     paymentMode?: string
     amount?: string
     totalPayout?: string
@@ -122,8 +122,8 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
                     }
                 } 
                 onChange={val => {
-                setNewGuest({...newGuest, ...val})
-            }}
+                    setNewGuest({...newGuest, ...val})
+                }}
             />
             <br />
             <BookingFrom 
@@ -170,13 +170,32 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
             }}/>
             <br />
             <CashTextBox 
+                value={(isShown && !newBooking) 
+                    ? {
+                        paymentMode: booking.modeOfPayment,
+                        amount: booking.nightlyPrice.toString(),
+                        totalPayout: booking.totalPayout.toString(),
+                    }
+                    : {
+                        paymentMode: "",
+                        amount: "",
+                        totalPayout: "",
+                    }
+                }
                 onChange={val => {
                 setPaymentDetails({ ...paymentDetails, ...val })
             }} />
             <br />
-            <RoomPicker multiple={true} options={options} value={roomPicked} onChange={val => {
-                const values = val as SelectOption[]
-                setRoomPicked(values)
+            <RoomPicker 
+                multiple={true} 
+                options={options} 
+                value={
+                    (booking.rooms)
+                    ? booking.rooms.map((room) => { return { label: room, value: room }})
+                    : roomPicked} 
+                onChange={val => {
+                    const values = val as SelectOption[]
+                    setRoomPicked(values)
                 }}/>
             <br />
             <DateTimePicker 
@@ -196,7 +215,14 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
                 setDatePaid({ ...datePaid, ...val }) 
             }}/>
             <br />
-            <TextBox onChange={handleRemarksChange} placeholder="Remarks . . ." />
+            <TextBox 
+                value={(isShown && !newBooking) 
+                    ? booking.remarks
+                    : ""
+                }
+                onChange={handleRemarksChange} 
+                placeholder="Remarks . . ." 
+            />
             <br />
             <p className={styles.decide}>
                 <Button onClick={handleOnClick} name={"Confirm to continue"} isMain={true} />

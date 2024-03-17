@@ -27,10 +27,6 @@ export function RoomPicker({ multiple, value, onChange, options }: SelectProps) 
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(0)
 
-    function clearOptions() {
-        multiple ? onChange([]) : onChange(options[0])
-    }
-
     function clearOption(option: SelectOption) {
         const values = value as SelectOption[]
         if (values?.includes(option)) {
@@ -73,24 +69,22 @@ export function RoomPicker({ multiple, value, onChange, options }: SelectProps) 
                         function() {
                             const values = value as SelectOption[];
                             return values.map((v, index) => (
-                                <>
-                                    <button 
-                                        key={index} 
-                                        onClick={
-                                            e => {
-                                                e.stopPropagation()
-                                                clearOption(v)
-                                            }
+                                <button 
+                                    key={index} 
+                                    onClick={
+                                        e => {
+                                            e.preventDefault();
+                                            clearOption(v);
                                         }
-                                        className={styles["option-badge"]}
-                                    >                                        
-                                        <small className={styles["remove-btn"]}>
-                                            {v.label}
-                                            &nbsp;
-                                            &times;
-                                        </small>
-                                    </button>
-                                </>
+                                    }
+                                    className={styles["option-badge"]}
+                                >                                        
+                                    <small className={styles["remove-btn"]}>
+                                        {v.label}
+                                        &nbsp;
+                                        &times;
+                                    </small>
+                                </button>
 
                             ))                            
                         }
@@ -99,7 +93,15 @@ export function RoomPicker({ multiple, value, onChange, options }: SelectProps) 
                         value?.label
                 }
             </h6>
-            <button onClick={clearOptions} className={styles["clear-btn"]}>&times;</button>
+            <button 
+                onClick={(e) => {
+                    e.preventDefault();
+                    multiple ? onChange([]) : onChange(options[0])
+                }} 
+                className={styles["clear-btn"]}
+            >
+                &times;
+            </button>
             <small className={styles.divider}></small>
             <small className={styles.caret}></small>
             <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
