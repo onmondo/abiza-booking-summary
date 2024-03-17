@@ -78,7 +78,7 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
                                         key={index} 
                                         onClick={
                                             e => {
-                                                e.stopPropagation()
+                                                e.preventDefault()
                                                 clearOption(v)
                                             }
                                         }

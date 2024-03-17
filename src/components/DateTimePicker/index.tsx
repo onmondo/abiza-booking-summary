@@ -105,33 +105,48 @@ export function DateTimePicker({ value, onChange }: ChangeDateRequest) {
         <section className={styles.container}>
             <SolarCalendarDateLinear />
             <Select 
+                // value={
+                //     (value?.month) 
+                //         ? monthOptions.find((month) => {
+                //             const selectedMonth = moment(value.month);
+                //             return month.value === selectedMonth.format("MMMM")
+                //         }) 
+                //         : month
+                // }
                 value={
-                    (value?.month) 
-                        ? monthOptions.find((month) => {
+                    (month) 
+                        ? month 
+                        : monthOptions.find((month) => {
                             const selectedMonth = moment(value.month);
                             return month.value === selectedMonth.format("MMMM")
-                        }) 
-                        : month
-                }
+                        })
+                }                
                 options={monthOptions} 
                 onChange={(v) => handleMonthOnChange(v) }
                 newStyles={selectStyles}
             />
             <Select 
                 value={
-                    (value?.day) 
-                        ? dayOptions.find((day) => {
+                    (day) 
+                        ? day
+                        : dayOptions.find((day) => {
                             const selectedDay = moment(value.day);
                             return day.value === selectedDay.format("D")
                         }) 
-                        : day
                 }                
                 options={dayOptions} 
                 onChange={(v) => handleDayOnChange(v) } 
                 newStyles={selectStyles}
             />
             <Select 
-                value={year}
+                value={
+                    (year) 
+                        ? year
+                        : yearOptions.find((year) => {
+                            const selectedYear = moment(value.year);
+                            return year.value === selectedYear.format("YYYY")
+                        }) 
+                } 
                 options={yearOptions} 
                 onChange={(v) => handleYearOnChange(v)} 
                 newStyles={selectStyles}

@@ -64,18 +64,23 @@ export function CashTextBox({ value, onChange }: ChangePayRequest) {
         <section className={styles.container}>
             <SolarDollarMinimalisticLinear />
             <Select 
+                // value={
+                //     (value?.paymentMode)
+                //         ? paymentOptions.find((paymentOption) => paymentOption.value === value.paymentMode)
+                //         : paymentOption
+                // }
                 value={
-                    (value?.paymentMode)
-                        ? paymentOptions.find((paymentOption) => paymentOption.value === value.paymentMode)
-                        :paymentOption
-                }
+                    (paymentOption)
+                        ? paymentOption
+                        : paymentOptions.find((paymentOption) => paymentOption.value === value.paymentMode)
+                }                
                 options={paymentOptions} 
                 onChange={(v) => { handlePaymentOnChange(v) }} 
                 newStyles={selectStyles}
             />
             <input 
                 type="number" 
-                value={(value.amount) ? value.amount : amount}
+                value={(amount) ? amount : value.amount}
                 placeholder="Nightly price" 
                 onBlur={(e) => { handleAmountBlur({ amount: e.target.value }) }}
                 onChange={(e) => { handleAmountChange({ amount: e.target.value }) }}
@@ -85,7 +90,7 @@ export function CashTextBox({ value, onChange }: ChangePayRequest) {
             />
             <input 
                 type="number" 
-                value={(value.totalPayout) ? value.totalPayout : total}
+                value={(total) ? total : value.totalPayout}
                 placeholder="Total payout" 
                 onBlur={(e) => { handleTotalBlur({ totalPayout: e.target.value }) }}
                 onChange={(e) => { handleTotalChange({ totalPayout: e.target.value }) }}

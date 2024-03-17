@@ -39,9 +39,9 @@ type BookingFormProps = {
 export function BookingForm({ newBooking, isShown, toggleForm, booking }: BookingFormProps) {
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
-        { label: "Room 1", value: "room1" },
-        { label: "Room 2", value: "room2" },
-        { label: "Attic", value: "attic" },
+        { label: "room1", value: "room1" },
+        { label: "room2", value: "room2" },
+        { label: "attic", value: "attic" },
       ]
 
     const [roomPicked, setRoomPicked] = useState<SelectOption[]>([])
@@ -95,10 +95,9 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
 
     }
 
-    const handleRemarksChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRemarks(event.target.value);
-        // setNewBooking({ ...newBooking, remarks: event.target.value})
-    }
+    // const handleRemarksChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setRemarks(event.target.value);
+    // }
 
     const handleOnClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault()
@@ -191,7 +190,11 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
                 options={options} 
                 value={
                     (booking.rooms)
-                    ? booking.rooms.map((room) => { return { label: room, value: room }})
+                    ? booking.rooms.map((room) => { 
+                        return { 
+                            label: room, value: room 
+                        }
+                    })
                     : roomPicked} 
                 onChange={val => {
                     const values = val as SelectOption[]
@@ -220,13 +223,22 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
                     ? booking.remarks
                     : ""
                 }
-                onChange={handleRemarksChange} 
+                onChange={val => {
+                    setRemarks(val)
+                }} 
                 placeholder="Remarks . . ." 
             />
             <br />
             <p className={styles.decide}>
                 <Button onClick={handleOnClick} name={"Confirm to continue"} isMain={true} />
-                <Button onClick={(e) => { e.preventDefault(); toggleForm(false) }} name={"Cancel"} isMain={false} />
+                <Button 
+                    onClick={(e) => { 
+                        e.preventDefault(); 
+                        toggleForm(false);
+                    }} 
+                    name={"Cancel"} 
+                    isMain={false} 
+                />
             </p>
         </form>
     )

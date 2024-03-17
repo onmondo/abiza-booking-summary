@@ -19,9 +19,9 @@ export function Select({ value, onChange, options, newStyles }: SelectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(0)
 
-    function clearOptions() {
-        onChange(options[0])
-    }
+    // function clearOptions() {
+    //     onChange(options[0])
+    // }
 
     function selectOption(option: SelectOption) {
         if (option !== value) onChange(option)
@@ -39,7 +39,7 @@ export function Select({ value, onChange, options, newStyles }: SelectProps) {
             className={styles.container}
         >
             <h4 className={styles.value}>{value?.label}</h4>
-            <button onClick={clearOptions} className={styles["clear-btn"]}>&times;</button>
+            <button onClick={(e) => { e.preventDefault(); onChange(options[0]);}} className={styles["clear-btn"]}>&times;</button>
             <small className={styles.divider}></small>
             <small className={styles.caret}></small>
             <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
