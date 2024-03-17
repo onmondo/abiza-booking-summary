@@ -90,16 +90,21 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                     booking => 
                     <li 
                         key={booking._id} 
-                        onClick={(e) => { 
-                            e.preventDefault(); 
-                            selectBooking(booking);
-                        }
-                    }>
+                        // onClick={(e) => { 
+                        //     e.preventDefault(); 
+                        //     selectBooking(booking);
+                        // }
+                    // }
+                    >
                         <BookingRow
-                            onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => { 
-                                event.preventDefault()
+                            removeBooking={(e) => { 
+                                e.preventDefault();
                                 setBookingForDeletion(booking._id) 
                                 setShowRemoveModal(!showRemoveModal)
+                            }}
+                            updateBooking={(e) => { 
+                                e.preventDefault(); 
+                                selectBooking(booking);
                             }}
                             guestName={booking.guestName}
                             bookFrom={booking.from}

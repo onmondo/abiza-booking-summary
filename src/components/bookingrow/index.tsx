@@ -8,6 +8,7 @@ import { SolarMoonSleepLinear } from "../icons/nightsicon";
 import styles from "./row.module.css";
 import Big from "big.js";
 import { SolarClipboardRemoveLinear } from "../icons/removebookingicon";
+import { SolarClipboardListOutline } from "../icons/updatebookingicon";
 
 type BookingDetails = {
     guestName: string
@@ -21,7 +22,8 @@ type BookingDetails = {
     amount: string,
     remarks: string,
     totalAmount: string,
-    onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+    removeBooking: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+    updateBooking: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 export function BookingRow({ 
         guestName, 
@@ -35,7 +37,8 @@ export function BookingRow({
         amount,
         remarks,
         totalAmount,
-        onClick
+        removeBooking,
+        updateBooking
     }: BookingDetails) {
     const convertedCheckIn = moment(checkin).format("YYYY-MM-DD")
     const convertedCheckOut = moment(checkout).format("YYYY-MM-DD")
@@ -44,7 +47,26 @@ export function BookingRow({
 
     return (
         <article className={styles.container}>
-            <a href="#" onClick={(e) => { onClick(e) }} className={styles.actions}><SolarClipboardRemoveLinear /></a>
+            <ul className={styles.actions}>
+                <li>
+                <a 
+                    href="#"
+                    rel="Delete booking"
+                    onClick={(e) => { removeBooking(e) }} 
+                >
+                        <SolarClipboardRemoveLinear />
+                </a>
+                </li>
+                <li>
+                    <a 
+                        href="#" 
+                        rel="Update booking"
+                        onClick={(e) => { updateBooking(e) }} 
+                    >
+                            <SolarClipboardListOutline />
+                    </a>                    
+                </li>
+            </ul>
             <ul className={`${styles.list} ${styles.roomoccupied}`}>
                 {rooms.map((room, i) => <li key={i}><SolarBedBroken /><small>{room}</small></li>)}
             </ul>
