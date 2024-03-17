@@ -1,11 +1,14 @@
+import { GuestDetails } from "../bookingformModal";
 import { SolarUserCircleLinear } from "../icons/usericon";
 import styles from "./textbox.module.css";
 
 type ChangeTextRequest = {
+    value: GuestDetails
     onChange: <T>(val: T) => void
 }
 
 export function UserTextBox({ 
+    value,
     onChange 
 }: ChangeTextRequest) {
     const handleChangeGuestName = (val: string) => {
@@ -25,6 +28,7 @@ export function UserTextBox({
             <SolarUserCircleLinear />
             <input className={styles.guest}
                 type="text" 
+                value={value.guestName}
                 maxLength={50} 
                 placeholder="Guest's name"
                 onChange={(e) => { handleChangeGuestName(e.target.value) }}
@@ -32,6 +36,7 @@ export function UserTextBox({
             <input 
                 className={styles.pax}
                 type="number" 
+                value={value.pax}
                 // maxLength={50} 
                 placeholder="Pax"
                 onChange={(e) => { handleChangePax(e.target.value) }}
@@ -39,6 +44,7 @@ export function UserTextBox({
             <input 
                 className={styles.stay}
                 type="number" 
+                value={value.stay}
                 // value={`${stay} night`}
                 // maxLength={50} 
                 placeholder="No. stay"

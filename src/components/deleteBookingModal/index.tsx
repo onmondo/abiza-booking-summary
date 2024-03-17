@@ -8,7 +8,6 @@ type RemoveRequest = {
 }
 
 export function RemoveBooking({ modalStatus, onClick, toggleForm }: RemoveRequest) {
-    console.log("modalStatus", modalStatus)
     return (
         <section className={`${styles.container} ${(modalStatus) ? `${styles.container} ${styles.show}` : `${styles.container} ${styles.hide}`}`}>
             <header>

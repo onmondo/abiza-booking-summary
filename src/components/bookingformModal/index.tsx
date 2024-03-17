@@ -9,6 +9,7 @@ import { Button } from "../button";
 import axios from "axios";
 import { TextBox } from "../textbox";
 import moment from "moment";
+import { BookingResponse } from "../bookings";
 
 type PaymentDetails = {
     paymentMode?: string
@@ -16,7 +17,7 @@ type PaymentDetails = {
     totalPayout?: string
 }
 
-type GuestDetails = {
+export type GuestDetails = {
     guestName?: string
     pax?: string
     stay?: string
@@ -29,10 +30,11 @@ export type ISODateText = {
 }
 
 type BookingFormProps = {
+    booking: BookingResponse
     toggleForm: Dispatch<SetStateAction<boolean>>
 }
 
-export function BookingForm({ toggleForm }: BookingFormProps) {
+export function BookingForm({ toggleForm, booking }: BookingFormProps) {
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
         { label: "Room 1", value: "room1" },
@@ -70,7 +72,7 @@ export function BookingForm({ toggleForm }: BookingFormProps) {
             remarks: remarks,
         }
 
-        console.log(newBooking);
+        // console.log(newBooking);
         try {
             await axios.post(apiUrl, newBooking, {
                 headers: {
@@ -85,7 +87,7 @@ export function BookingForm({ toggleForm }: BookingFormProps) {
             toggleForm(false);
         } catch (error) {
             const errorDetails = error as Error;
-            console.log(errorDetails.message);
+            console.log("Failed to create new booking record", errorDetails.message);
             // message.push(`Create order failed... [${errorDetails.message}]`)
             // setMessage(message);
         }
@@ -105,7 +107,13 @@ export function BookingForm({ toggleForm }: BookingFormProps) {
     return (
         <form className={styles.container}>
             {/* <h1>{now.add({days: 1}).toString()}</h1> */}
-            <UserTextBox onChange={val => {
+            <UserTextBox 
+                value={{ 
+                    guestName: booking.guestName,
+                    stay: booking.noOfStay.toString(),
+                    pax: booking.noOfPax.toString(),
+                }} 
+                onChange={val => {
                 setNewGuest({...newGuest, ...val})
             }}
             />

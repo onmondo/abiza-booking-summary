@@ -4,13 +4,14 @@ import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
 import { RemoveBooking } from "../deleteBookingModal";
 
-type SearchBookingRequest = {
+interface SearchBookingRequest {
     year: string
     month: string
     bookingFormStatus: boolean
+    selectBooking(booking: BookingResponse): void
 }
 
-type BookingResponse = {
+export type BookingResponse = {
     _id: string
     guestName: string
     from: string
@@ -26,7 +27,7 @@ type BookingResponse = {
     totalPayout: number
 }
 
-export function Bookings({ year, month, bookingFormStatus }: SearchBookingRequest) {
+export function Bookings({ year, month, bookingFormStatus, selectBooking }: SearchBookingRequest) {
     const [bookings, setBookings] = useState<BookingResponse[]>([])
     const [bookingForDeletion, setBookingForDeletion] = useState<string>()
     const [showRemoveModal, setShowRemoveModal] = useState(false);
@@ -44,7 +45,7 @@ export function Bookings({ year, month, bookingFormStatus }: SearchBookingReques
             setBookings(data.monthlyBookings)
         } catch(error) {
             const errorDetails = error as Error;
-            console.log(errorDetails.message)
+            console.log(`Failed to fetch bookings for ${month} ${year}`, errorDetails.message)
         }
     }
 
@@ -61,7 +62,7 @@ export function Bookings({ year, month, bookingFormStatus }: SearchBookingReques
             await fetchBookings();
         } catch(error) {
             const errorDetails = error as Error;
-            console.log(errorDetails.message)
+            console.log(`Failed to remove booking for ${month} ${year}`, errorDetails.message)
         }
     }
 
@@ -87,7 +88,13 @@ export function Bookings({ year, month, bookingFormStatus }: SearchBookingReques
             {
                 bookings.map(
                     booking => 
-                    <li key={booking._id}>
+                    <li 
+                        key={booking._id} 
+                        onClick={(e) => { 
+                            e.preventDefault(); 
+                            selectBooking(booking);
+                        }
+                    }>
                         <BookingRow
                             onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => { 
                                 event.preventDefault()
