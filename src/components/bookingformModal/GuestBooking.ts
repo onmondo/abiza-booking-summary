@@ -59,11 +59,15 @@ export default class GuestBookingRequest {
         }
 
         setCheckIn(checkedIn: ISODateText): GuestBookingRequestBuilder {            
-            this.specs.checkIn = moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
+            this.specs.checkIn = (checkedIn) 
+                ? moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                : moment().format("YYYY-MM-DD");
             return this;
         }
         setCheckout(checkedOut: ISODateText): GuestBookingRequestBuilder {
-            this.specs.checkOut = moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
+            this.specs.checkOut = (checkedOut) 
+                ? moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                : moment().format("YYYY-MM-DD");
             return this;
         }
         setNoOfPax(guest: GuestDetails): GuestBookingRequestBuilder {
@@ -91,7 +95,9 @@ export default class GuestBookingRequest {
             return this;
         }
         setDatePaid(datePaid: ISODateText): GuestBookingRequestBuilder {
-            this.specs.datePaid = moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
+            this.specs.datePaid = (datePaid) 
+                ? moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                : moment().format("YYYY-MM-DD");
             return this;
         }
         setRemarks(remarks: string): GuestBookingRequestBuilder {

@@ -144,7 +144,6 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
         }
     }
 
-    console.log("eval", isShown, newBooking, (isShown && !newBooking))
     return (
         <form className={styles.container}>
             {/* <h1>{now.add({days: 1}).toString()}</h1> */}
