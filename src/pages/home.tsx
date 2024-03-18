@@ -43,6 +43,7 @@ export function Home() {
                         e.preventDefault();
                         setShowBookingForm(!showBookingForm);
                         setIsNewBooking(true);
+                        setSelectedBooking({});
                     }}
                 />
             </p>

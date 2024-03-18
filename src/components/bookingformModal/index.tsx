@@ -10,6 +10,8 @@ import axios from "axios";
 import { TextBox } from "../textbox";
 import moment from "moment";
 import { BookingResponse } from "../bookings";
+import GuestBookingRequest from "./GuestBooking";
+import { isEmpty } from "lodash";
 
 export type PaymentDetails = {
     paymentMode?: string
@@ -56,26 +58,23 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
     const postNewBooking = async () => {
         const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings`;
 
-        const formatCheckIn = moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
-        const formatChackOut = moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
-        const datePaidMonth = moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD");
-        const newBooking = {
-            guestName: newGuest?.guestName,
-            rooms: roomPicked.map(room => room.value),
-            checkIn: formatCheckIn,
-            checkOut: formatChackOut,
-            noOfPax: parseInt(newGuest?.pax || "0"),
-            noOfStay: parseInt(newGuest?.stay || "0"),
-            nightlyPrice: parseFloat(paymentDetails?.amount || "0"),
-            totalPayout: parseFloat(paymentDetails?.totalPayout || "0"),
-            from: bookedFrom,
-            modeOfPayment: paymentDetails?.paymentMode,
-            datePaid: datePaidMonth,
-            remarks: remarks,
-        }
+        const newBookingRequestBuilder = new GuestBookingRequest.GuestBookingRequestBuilder();
+        newBookingRequestBuilder.setGuestName(newGuest as GuestDetails);
+        newBookingRequestBuilder.setRooms(roomPicked);
+        newBookingRequestBuilder.setCheckIn(checkedIn as ISODateText);
+        newBookingRequestBuilder.setCheckout(checkedOut as ISODateText);
+        newBookingRequestBuilder.setNoOfPax(newGuest as GuestDetails);
+        newBookingRequestBuilder.setNoOfStay(newGuest as GuestDetails);
+        newBookingRequestBuilder.setNightlyPrice(paymentDetails as PaymentDetails);
+        newBookingRequestBuilder.setTotalPayout(paymentDetails as PaymentDetails);
+        newBookingRequestBuilder.setFrom(bookedFrom as string);
+        newBookingRequestBuilder.setModeOfPayment(paymentDetails as PaymentDetails);
+        newBookingRequestBuilder.setDatePaid(datePaid as ISODateText);
+        newBookingRequestBuilder.setRemarks(remarks as string);
 
+        const newBookingRequest = newBookingRequestBuilder.build();
         try {
-            await axios.post(apiUrl, newBooking, {
+            await axios.post(apiUrl, newBookingRequest.getSpecs(), {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
@@ -95,15 +94,57 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
 
     }
 
-    // const handleRemarksChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setRemarks(event.target.value);
-    // }
+    const updateBooking = async () => {
+        const selectedYear = moment(booking.checkIn).year()
+        const selectedMonth = moment(booking.checkIn).format("MMMM")
+        const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${selectedYear}/${selectedMonth}/${booking._id}`
+
+        const updateBookingRequestBuilder = new GuestBookingRequest.GuestBookingRequestBuilder();
+        if(!isEmpty(newGuest)) updateBookingRequestBuilder.setGuestName(newGuest as GuestDetails);
+        updateBookingRequestBuilder.setRooms(roomPicked);
+        if(!isEmpty(checkedIn)) updateBookingRequestBuilder.setCheckIn(checkedIn as ISODateText);
+        if(!isEmpty(checkedOut)) updateBookingRequestBuilder.setCheckout(checkedOut as ISODateText);
+        if(!isEmpty(newGuest)) updateBookingRequestBuilder.setNoOfPax(newGuest as GuestDetails);
+        if(!isEmpty(newGuest)) updateBookingRequestBuilder.setNoOfStay(newGuest as GuestDetails);
+        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setNightlyPrice(paymentDetails as PaymentDetails);
+        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setTotalPayout(paymentDetails as PaymentDetails);
+        if(!isEmpty(bookedFrom)) updateBookingRequestBuilder.setFrom(bookedFrom as string);
+        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setModeOfPayment(paymentDetails as PaymentDetails);
+        if(!isEmpty(datePaid)) updateBookingRequestBuilder.setDatePaid(datePaid as ISODateText);
+        if(!isEmpty(remarks)) updateBookingRequestBuilder.setRemarks(remarks as string);
+
+        const updateBookingRequest = updateBookingRequestBuilder.build();
+
+        try {
+            await axios.patch(apiUrl, updateBookingRequest.getSpecs(), {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${accessToken}`
+                }
+            })
+            // message.push("Successfully created a new order!")
+            // setMessage(message);
+            // setNewBooking(addedNewOrder);
+            toggleForm(false);
+        } catch (error) {
+            const errorDetails = error as Error;
+            console.log("Failed to create new booking record", errorDetails.message);
+            // message.push(`Create order failed... [${errorDetails.message}]`)
+            // setMessage(message);
+        }
+    }
 
     const handleOnClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault()
-        postNewBooking()
+        if (newBooking) {
+            postNewBooking()
+        } else {
+            updateBooking()
+        }
     }
 
+    console.log("eval", isShown, newBooking, (isShown && !newBooking))
     return (
         <form className={styles.container}>
             {/* <h1>{now.add({days: 1}).toString()}</h1> */}
