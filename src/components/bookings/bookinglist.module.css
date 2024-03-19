@@ -1,4 +1,14 @@
 .container {
+
+}
+
+.bookinglist {
     list-style: none;
     padding: 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

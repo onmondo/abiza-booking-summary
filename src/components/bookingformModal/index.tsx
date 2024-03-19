@@ -12,6 +12,7 @@ import moment from "moment";
 import { BookingResponse } from "../bookings";
 import GuestBookingRequest from "./GuestBooking";
 import { isEmpty } from "lodash";
+import { SolarNotebookLinear } from "../icons/noteicon";
 
 export type PaymentDetails = {
     paymentMode?: string
@@ -267,7 +268,9 @@ export function BookingForm({ newBooking, isShown, toggleForm, booking }: Bookin
                     setRemarks(val)
                 }} 
                 placeholder="Remarks . . ." 
-            />
+            >
+                <SolarNotebookLinear />
+            </TextBox>
             <br />
             <p className={styles.decide}>
                 <Button onClick={handleOnClick} name={"Confirm to continue"} isMain={true} />

@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
 import { RemoveBooking } from "../deleteBookingModal";
+import { Button } from "../button";
+import { TextBox } from "../textbox";
+// import { DateTimePicker } from "../DateTimePicker";
 
 interface SearchBookingRequest {
     year: string
@@ -27,12 +30,25 @@ export type BookingResponse = {
     totalPayout: number
 }
 
+// type Pagination = {
+//     page: number
+//     limit: number
+// }
+
 export function Bookings({ year, month, bookingFormStatus, selectBooking }: SearchBookingRequest) {
+    const defaultPage: number = 1;
+    const defaultLimit: number = 10;
     const [bookings, setBookings] = useState<BookingResponse[]>([])
     const [bookingForDeletion, setBookingForDeletion] = useState<string>()
     const [showRemoveModal, setShowRemoveModal] = useState(false);
+    const [page, setPage] = useState(defaultPage);
+    const [limit, setLimit] = useState(defaultLimit);
+    const [totalBookings, setTotalBookings] = useState(0);
+    const [activeNextButton, setActiveNextButton] = useState(true);
+    const [activePrevButton, setActivePrevButton] = useState(false);
+
     const fetchBookings = async () => {
-        const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${year}/${month}?sort=asc`;
+        const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${year}/${month}?sort=asc&page=${page}&limit=${limit}`
         
         try {
             const response = await axios.get(apiUrl, {
@@ -42,7 +58,11 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                 }
             });
             const { data } = response;
-            setBookings(data.monthlyBookings)
+            // const currentBookingCount = data.monthlyBookings.length;
+            setActiveNextButton(!(data.monthlyBookings.data.length < defaultLimit))
+            setTotalBookings(data.monthlyBookings.totalCount)
+            setBookings(data.monthlyBookings.data)
+            
         } catch(error) {
             const errorDetails = error as Error;
             console.log(`Failed to fetch bookings for ${month} ${year}`, errorDetails.message)
@@ -66,16 +86,20 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
         }
     }
 
-    // const handleDeleteBooking = (bookingId: string) => {
-    //     removeBooking(bookingId);
-    // }
-
     useEffect(() => {
         fetchBookings();
-    }, [bookingFormStatus])
+        setActivePrevButton(page !== 1);
+        // console.log(totalBookings)
+        // const totalRecords = bookings.length;
+        // setTotalBookings(totalBookings + totalRecords);
+    }, [bookingFormStatus, page])
 
+    function handleLimitOnchange(val: string) {
+        console.log(val)
+        setLimit(10);
+    }
     return (
-        <>
+        <section className={styles.container}>
             <RemoveBooking 
                 modalStatus={showRemoveModal}
                 toggleForm={() => { setShowRemoveModal(!showRemoveModal) }} 
@@ -84,7 +108,13 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                     setShowRemoveModal(!showRemoveModal)
                 }} 
             />
-            <ul className={styles.container}>
+            <TextBox 
+                value={limit.toString()} 
+                onChange={handleLimitOnchange}
+                placeholder="limit"
+            >
+            </TextBox>
+            <ul className={styles.bookinglist}>
             {
                 bookings.map(
                     booking => 
@@ -115,7 +145,30 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                 )
             }   
             </ul>
-        </>
+            <p className={styles.pagination}>
+                <Button 
+                    name={"Previous"} 
+                    isMain={false} 
+                    onClick={(e) => {
+                        e.preventDefault()
+                        if (activePrevButton) {
+                            setPage(page - 1)
+                        }
+                    }}
+                />
+                <strong>Total Record/s: {totalBookings}</strong>
+                <Button 
+                    name={"Next"} 
+                    isMain={true} 
+                    onClick={(e) => {
+                        e.preventDefault()
+                        if (activeNextButton) {
+                            setPage(page + 1)
+                        }
+                    }}
+                />
+            </p>
+        </section>
 
     )
 }

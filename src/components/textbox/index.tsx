@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { SolarNotebookLinear } from "../icons/noteicon";
+import { Children, ReactNode, useState } from "react";
 import styles from "./textbox.module.css";
 
 type RemarksText = {
@@ -7,10 +6,11 @@ type RemarksText = {
     // onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     onChange: (val: string) => void
     placeholder: string
+    children?: ReactNode
 }
 
-export function TextBox({ value, onChange, placeholder }: RemarksText) {
-
+export function TextBox({ value, onChange, placeholder, children }: RemarksText) {
+    // const element: ReactNode = Children.only(children)
     const [remark, setRemark] = useState("")
     const handleValueChange = (val: string) => {
         onChange(val)
@@ -18,7 +18,7 @@ export function TextBox({ value, onChange, placeholder }: RemarksText) {
     }
     return (
         <section className={styles.container}>
-            <SolarNotebookLinear />
+            {(children) ? Children.only(children) : ""}
             <input
                 className={styles.guest}
                 type="text" 

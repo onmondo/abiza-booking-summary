@@ -32,7 +32,7 @@ export function Home() {
                     newBooking={isNewBooking}
                     isShown={(showBookingForm)} 
                     booking={selectedBooking as BookingResponse} 
-                    toggleForm={setShowBookingForm} 
+                    toggleForm={setShowBookingForm}
                 />
             </section>
             <p id="addnewbooking">
