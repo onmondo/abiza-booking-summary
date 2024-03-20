@@ -5,6 +5,9 @@ import styles from "./bookinglist.module.css";
 import { RemoveBooking } from "../deleteBookingModal";
 import { Button } from "../button";
 import { TextBox } from "../textbox";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { nextpage, prevpage, setActiveNext, setActivePrev, setTotalCount, updatelimit } from "../../redux/ducks/bookings";
 // import { DateTimePicker } from "../DateTimePicker";
 
 interface SearchBookingRequest {
@@ -30,22 +33,20 @@ export type BookingResponse = {
     totalPayout: number
 }
 
-// type Pagination = {
-//     page: number
-//     limit: number
-// }
-
 export function Bookings({ year, month, bookingFormStatus, selectBooking }: SearchBookingRequest) {
-    const defaultPage: number = 1;
-    const defaultLimit: number = 10;
+    const page = useSelector<{ bookings: { page: number }}>((state) => state.bookings.page) as number;
+    const totalPages = useSelector<{ bookings: { totalPages: number }}>((state) => state.bookings.totalPages) as number;
+    const limit = useSelector<{ bookings: { limit: number }}>((state) => state.bookings.limit) as number;
+    const totalBookings = useSelector<{ bookings: { totalCount: number }}>((state) => state.bookings.totalCount) as number;
+    const isNextButtonActive = useSelector<{ bookings: { isNextButtonActive: boolean }}>((state) => state.bookings.isNextButtonActive) as boolean;
+    const isPrevButtonActive = useSelector<{ bookings: { isPrevButtonActive: boolean }}>((state) => state.bookings.isPrevButtonActive) as boolean;
+    const dispatch = useDispatch();
+
     const [bookings, setBookings] = useState<BookingResponse[]>([])
     const [bookingForDeletion, setBookingForDeletion] = useState<string>()
     const [showRemoveModal, setShowRemoveModal] = useState(false);
-    const [page, setPage] = useState(defaultPage);
-    const [limit, setLimit] = useState(defaultLimit);
-    const [totalBookings, setTotalBookings] = useState(0);
-    const [activeNextButton, setActiveNextButton] = useState(true);
-    const [activePrevButton, setActivePrevButton] = useState(false);
+    // const [activeNextButton, setActiveNextButton] = useState(true);
+    // const [activePrevButton, setActivePrevButton] = useState(false);
 
     const fetchBookings = async () => {
         const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${year}/${month}?sort=asc&page=${page}&limit=${limit}`
@@ -59,8 +60,9 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
             });
             const { data } = response;
             // const currentBookingCount = data.monthlyBookings.length;
-            setActiveNextButton(!(data.monthlyBookings.data.length < defaultLimit))
-            setTotalBookings(data.monthlyBookings.totalCount)
+            // setActiveNextButton(!(data.monthlyBookings.data.length < defaultLimit))
+            // setTotalBookings(data.monthlyBookings.totalCount)
+            dispatch(setTotalCount(data.monthlyBookings.totalCount));
             setBookings(data.monthlyBookings.data)
             
         } catch(error) {
@@ -88,16 +90,30 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
 
     useEffect(() => {
         fetchBookings();
-        setActivePrevButton(page !== 1);
-        // console.log(totalBookings)
+        // setActivePrevButton(page !== 1);
         // const totalRecords = bookings.length;
-        // setTotalBookings(totalBookings + totalRecords);
-    }, [bookingFormStatus, page])
+    }, [bookingFormStatus, page, limit])
 
     function handleLimitOnchange(val: string) {
-        console.log(val)
-        setLimit(10);
+        dispatch(updatelimit(parseInt(val)))
     }
+
+    function handleNextPage() {
+        
+        if (isNextButtonActive) {
+            dispatch(nextpage());
+            dispatch(setActiveNext());
+        }
+    }
+
+    function handlePrevPage() {
+        
+        if (isPrevButtonActive) {
+            dispatch(prevpage())
+            dispatch(setActivePrev());
+        }
+    }
+
     return (
         <section className={styles.container}>
             <RemoveBooking 
@@ -108,12 +124,6 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                     setShowRemoveModal(!showRemoveModal)
                 }} 
             />
-            <TextBox 
-                value={limit.toString()} 
-                onChange={handleLimitOnchange}
-                placeholder="limit"
-            >
-            </TextBox>
             <ul className={styles.bookinglist}>
             {
                 bookings.map(
@@ -145,29 +155,27 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                 )
             }   
             </ul>
-            <p className={styles.pagination}>
+            <section className={styles.pagination}>
                 <Button 
                     name={"Previous"} 
                     isMain={false} 
-                    onClick={(e) => {
-                        e.preventDefault()
-                        if (activePrevButton) {
-                            setPage(page - 1)
-                        }
-                    }}
+                    onClick={handlePrevPage}
                 />
-                <strong>Total Record/s: {totalBookings}</strong>
+                <label>Limit</label>
+                <TextBox 
+                    value={limit.toString()} 
+                    onChange={handleLimitOnchange}
+                    placeholder="limit"
+                >
+                </TextBox>
+                <em>{page}/{totalPages}</em>
+                <em>Total Record/s: {totalBookings}</em>
                 <Button 
                     name={"Next"} 
                     isMain={true} 
-                    onClick={(e) => {
-                        e.preventDefault()
-                        if (activeNextButton) {
-                            setPage(page + 1)
-                        }
-                    }}
+                    onClick={handleNextPage}
                 />
-            </p>
+            </section>
         </section>
 
     )
