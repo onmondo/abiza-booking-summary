@@ -93,7 +93,7 @@ export function CashTextBox({ value }: ChangePayRequest) {
             />
             <input 
                 type="number" 
-                value={(value.amount) ? value.amount : nightlyPrice}
+                value={(nightlyPrice) ? nightlyPrice : value.amount}
                 placeholder="Nightly price" 
                 onBlur={(e) => { handleAmountBlur({ amount: e.target.value }) }}
                 onChange={(e) => { handleAmountChange({ amount: e.target.value }) }}
@@ -103,7 +103,7 @@ export function CashTextBox({ value }: ChangePayRequest) {
             />
             <input 
                 type="number" 
-                value={(value.totalPayout) ? value.totalPayout : totalPayout}
+                value={(totalPayout) ? totalPayout : value.totalPayout}
                 placeholder="Total payout" 
                 onBlur={(e) => { handleTotalBlur({ totalPayout: e.target.value }) }}
                 onChange={(e) => { handleTotalChange({ totalPayout: e.target.value }) }}

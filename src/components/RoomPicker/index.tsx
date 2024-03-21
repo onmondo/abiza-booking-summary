@@ -64,8 +64,9 @@ export function RoomPicker({ multiple, value, onChange, options }: SelectProps) 
             <SolarBedBroken />
             <h6 className={styles.value}>
                 {
-                    multiple 
-                    ? (
+                    // multiple 
+                    // ?
+                     (
                         function() {
                             const values = value as SelectOption[];
                             return values.map((v, index) => (
@@ -89,8 +90,8 @@ export function RoomPicker({ multiple, value, onChange, options }: SelectProps) 
                             ))                            
                         }
                     )()
-                    :
-                        value?.label
+                    // :
+                    //     (value)? value?.label : ""
                 }
             </h6>
             <button 

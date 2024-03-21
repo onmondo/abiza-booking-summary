@@ -14,7 +14,7 @@ import { isEmpty } from "lodash";
 import { SolarNotebookLinear } from "../icons/noteicon";
 import { useSelector, useDispatch } from "react-redux";
 import { closeBookingForm } from "../../redux/ducks/bookings";
-import { setBookFrom, setCheckIn, setCheckOut, setDatePaid, setRemarks, setRooms } from "../../redux/ducks/bookingForm";
+import { setBookFrom, setCheckIn, setCheckOut, setDatePaid, setGuestName, setPax, setRemarks, setRooms, setStay } from "../../redux/ducks/bookingForm";
 
 export type PaymentDetails = {
     paymentMode?: string
@@ -50,6 +50,9 @@ export function BookingForm() {
     const from = useSelector<{ bookingForm: { from: string }}>((state) => state.bookingForm.from) as string;
     const remarks = useSelector<{ bookingForm: { remarks: string }}>((state) => state.bookingForm.remarks) as string;
 
+    console.log("guestName", guestName)
+    console.log("noOfPax", noOfPax)
+    console.log("noOfStay", noOfStay)
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
         { label: "room1", value: "room1" },
@@ -99,26 +102,23 @@ export function BookingForm() {
         const selectedMonth = moment(checkIn).format("MMMM")
         const apiUrl = `${import.meta.env.VITE_ROOT_API}/bookings/${selectedYear}/${selectedMonth}/${selectedBooking._id}`
 
-        const paymentDetails = {
-            paymentMode: modeOfPayment.toString(),
-            amount: nightlyPrice.toString(),
-            totalPayout: totalPayout.toString()
-        }
         const updateBookingRequestBuilder = new GuestBookingRequest.GuestBookingRequestBuilder();
         if(!isEmpty(guestName)) updateBookingRequestBuilder.setGuestName(guestName);
         if(!isEmpty(rooms)) updateBookingRequestBuilder.setRooms(rooms);
         if(!isEmpty(checkIn)) updateBookingRequestBuilder.setCheckIn(checkIn);
         if(!isEmpty(checkOut)) updateBookingRequestBuilder.setCheckout(checkOut);
-        if(!isEmpty(guestName)) updateBookingRequestBuilder.setNoOfPax(noOfPax);
-        if(!isEmpty(guestName)) updateBookingRequestBuilder.setNoOfStay(noOfStay);
-        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setNightlyPrice(nightlyPrice);
-        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setTotalPayout(totalPayout);
+        if(noOfPax > 0) updateBookingRequestBuilder.setNoOfPax(noOfPax);
+        if(noOfStay > 0) updateBookingRequestBuilder.setNoOfStay(noOfStay);
+        if(nightlyPrice > 0) updateBookingRequestBuilder.setNightlyPrice(nightlyPrice);
+        if(totalPayout > 0) updateBookingRequestBuilder.setTotalPayout(totalPayout);
         if(!isEmpty(from)) updateBookingRequestBuilder.setFrom(from);
-        if(!isEmpty(paymentDetails)) updateBookingRequestBuilder.setModeOfPayment(modeOfPayment);
+        if(!isEmpty(modeOfPayment)) updateBookingRequestBuilder.setModeOfPayment(modeOfPayment);
         if(!isEmpty(datePaid)) updateBookingRequestBuilder.setDatePaid(datePaid);
         if(!isEmpty(remarks)) updateBookingRequestBuilder.setRemarks(remarks as string);
 
         const updateBookingRequest = updateBookingRequestBuilder.build();
+
+        console.log("updateBookingRequest", updateBookingRequest.getSpecs())
         try {
             await axios.patch(apiUrl, updateBookingRequest.getSpecs(), {
                 headers: {
@@ -156,12 +156,25 @@ export function BookingForm() {
     return (
         <form className={styles.container}>
             <UserTextBox 
-                value={{                        
-                    guestName: selectedBooking.guestName || "",
-                    stay: (selectedBooking?.noOfStay) ? selectedBooking?.noOfStay.toString() : "",
-                    pax: (selectedBooking?.noOfPax) ? selectedBooking?.noOfPax.toString() : ""
+                value={{
+                    guestName: (isEmpty(guestName)) ? selectedBooking.guestName : guestName,
+                    noOfPax: (isEmpty(noOfPax)) ? selectedBooking.noOfPax : noOfPax,
+                    noOfStay: (isEmpty(noOfStay)) ? selectedBooking.noOfStay : noOfStay,
                 }}
-            />
+                onChange={(val, type) => {
+                    switch(type) {
+                        case "guestName":
+                            dispatch(setGuestName(val));
+                            break;
+                        case "pax": 
+                            dispatch(setPax(parseInt(val)));
+                            break;
+                        case "stay": 
+                            dispatch(setStay(parseInt(val)));
+                            break;
+                    }
+                    
+                }}/>
             <br />
             <BookingFrom 
                 value={(isEmpty(from)) ? selectedBooking.from : from}
