@@ -4,21 +4,20 @@ import styles from "./datetime.module.css";
 import selectStyles from "./select.module.css";
 import { Select, SelectOption } from "../select";
 import moment from "moment";
-import { ISODateText } from "../bookingformModal";
 
 type ChangeDateRequest = {
-    value: ISODateText
+    value: string
     onChange: <T>(val: T) => void
 }
 
 export function DateTimePicker({ value, onChange }: ChangeDateRequest) {
+    
     const [month, setMonth] = useState<SelectOption>();
     const [day, setDay] = useState<SelectOption>();
     const [year, setYear] = useState<SelectOption>();
     const [monthOptions, setMonthOptions] = useState<SelectOption[]>([]);
     const [dayOptions, setDayOptions] = useState<SelectOption[]>([]);
     const [yearOptions, setYearOptions] = useState<SelectOption[]>([]);
-    // const [isoDate, setISODate] = useState<ISODateText>();
 
     const populateMonthOptions = () => {
         const monthOptions: SelectOption[] = moment.months().map(month => {return { label: month, value: month }})
@@ -66,87 +65,70 @@ export function DateTimePicker({ value, onChange }: ChangeDateRequest) {
         setYear(yearOptions.find(yearOption => yearOption.value === moment().format("YYYY")))
     }, [yearOptions])
 
-    // useEffect(() => {
-    //     setISODate({ month: month?.value, day: day?.value, year: year?.value})
-    // }, [month, day, year])
-
     function handleMonthOnChange(val: SelectOption | unknown ) {
         const value = val as SelectOption
         setMonth(value)
-        onChange({ month: value.value })
         const currentYear = moment().year();
+        const currentDay = moment().day();
+        onChange(moment(`${currentYear}-${value.value}-${(day) ? day.value : currentDay}`).format("YYYY-MM-DD"))
         const currentSelectedMonthYear = moment(`${currentYear}-${value.value}`).format("YYYY-MM")
         populateDayOptions(currentSelectedMonthYear)
-        // const enteredISODate = isoDate as ISODateText;
-        // setISODate({...enteredISODate, month: value.value})
     }
 
     function handleDayOnChange(val: SelectOption | unknown) {
         const value = val as SelectOption
         setDay(value)
-        onChange({ day: value.value})
-        // const enteredISODate = isoDate as ISODateText;
-        // setISODate({...enteredISODate, day: value.value})
-        
-        // onChange(enteredISODate)
+        const currentYear = moment().year();
+        const currentMonth = moment().month();
+        onChange(moment(`${currentYear}-${(month) ? month.value : currentMonth}-${value.value}`).format("YYYY-MM-DD"))
     }
 
     function handleYearOnChange(val: SelectOption | unknown) {
         const value = val as SelectOption
         setYear(value)
-        onChange({  year: value.value })
-        // const enteredISODate = isoDate as ISODateText;
-        // setISODate({...enteredISODate, year: value.value})
-    
-        // onChange(enteredISODate)
+        const currentMonth = moment().month();
+        const currentDay = moment().day();
+        onChange(moment(`${value.value}-${(month) ? month.value : currentMonth}-${(day) ? day.value : currentDay}`).format("YYYY-MM-DD"))
     }
 
     return (
         <section className={styles.container}>
             <SolarCalendarDateLinear />
             <Select 
-                // value={
-                //     (value?.month) 
-                //         ? monthOptions.find((month) => {
-                //             const selectedMonth = moment(value.month);
-                //             return month.value === selectedMonth.format("MMMM")
-                //         }) 
-                //         : month
-                // }
                 value={
-                    (month) 
-                        ? month 
-                        : monthOptions.find((month) => {
-                            const selectedMonth = moment(value.month);
+                    (value) 
+                        ? monthOptions.find((month) => {
+                            const selectedMonth = moment(value);
                             return month.value === selectedMonth.format("MMMM")
-                        })
-                }                
+                        }) 
+                        : month
+                }
                 options={monthOptions} 
                 onChange={(v) => handleMonthOnChange(v) }
                 newStyles={selectStyles}
             />
             <Select 
                 value={
-                    (day) 
-                        ? day
-                        : dayOptions.find((day) => {
-                            const selectedDay = moment(value.day);
+                    (value) 
+                        ? dayOptions.find((day) => {
+                            const selectedDay = moment(value);
                             return day.value === selectedDay.format("D")
                         }) 
-                }                
+                        : day
+                }
                 options={dayOptions} 
                 onChange={(v) => handleDayOnChange(v) } 
                 newStyles={selectStyles}
             />
             <Select 
                 value={
-                    (year) 
-                        ? year
-                        : yearOptions.find((year) => {
-                            const selectedYear = moment(value.year);
+                    (value) 
+                        ? yearOptions.find((year) => {
+                            const selectedYear = moment(value);
                             return year.value === selectedYear.format("YYYY")
                         }) 
-                } 
+                        : year
+                }
                 options={yearOptions} 
                 onChange={(v) => handleYearOnChange(v)} 
                 newStyles={selectStyles}
