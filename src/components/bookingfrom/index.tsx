@@ -18,7 +18,7 @@ export function BookingFrom({ value, onChange }: BookingFromText) {
             <SolarClipboardHeartLinear />
             <input
                 type="text"
-                value={(bookingFrom) ? bookingFrom : value}
+                value={(value) ? value : bookingFrom}
                 maxLength={50} 
                 placeholder="Agoda, walk-in . . ." 
                 onChange={(e) => { handleOnChangeBooking(e.target.value) }}

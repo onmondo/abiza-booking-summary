@@ -1,6 +1,6 @@
 import moment from "moment"
-import { GuestDetails, ISODateText, PaymentDetails } from "."
-import { SelectOption } from "../RoomPicker"
+import { GuestDetails } from "."
+// import { SelectOption } from "../RoomPicker"
 
 interface GuestBooking {
     guestName: string //newGuest?.guestName,
@@ -29,74 +29,64 @@ export default class GuestBookingRequest {
     }
 
     static GuestBookingRequestBuilder = class GuestBookingRequestBuilder {
-        private specs: GuestBooking;
+        private specs: unknown;
 
         constructor() {
-            this.specs = {
-                guestName: "",
-                rooms: [],
-                checkIn: "",
-                checkOut: "",
-                noOfPax: 0,
-                noOfStay: 0,
-                nightlyPrice: 0,
-                totalPayout: 0,
-                from: "",
-                modeOfPayment: "",
-                datePaid: "",
-                remarks: ""
-            }
+            this.specs = {}
         }
 
-        setGuestName(guest: GuestDetails): GuestBookingRequestBuilder {
-            this.specs.guestName = guest.guestName as string;
+        setGuestName(guestName: string): GuestBookingRequestBuilder {
+            this.specs.guestName = guestName;
             return this;
         }
 
-        setRooms(rooms: SelectOption[]): GuestBookingRequestBuilder {
-            this.specs.rooms = rooms.map(room => room.value);
+        setRooms(rooms: string[]): GuestBookingRequestBuilder {
+            this.specs.rooms = rooms;
             return this;
         }
 
-        setCheckIn(checkedIn: ISODateText): GuestBookingRequestBuilder {            
+        setCheckIn(checkedIn: string): GuestBookingRequestBuilder {            
             this.specs.checkIn = (checkedIn) 
-                ? moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                // ? moment(`${(checkedIn?.year) ? checkedIn?.year : moment().format("YYYY")}-${checkedIn?.month}-${checkedIn?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                ? moment(checkedIn, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
                 : moment().format("YYYY-MM-DD");
             return this;
         }
-        setCheckout(checkedOut: ISODateText): GuestBookingRequestBuilder {
+        setCheckout(checkedOut: string): GuestBookingRequestBuilder {
             this.specs.checkOut = (checkedOut) 
-                ? moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                // ? moment(`${(checkedOut?.year) ? checkedOut?.year : moment().format("YYYY")}-${checkedOut?.month}-${checkedOut?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                ? moment(checkedOut, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
                 : moment().format("YYYY-MM-DD");
             return this;
         }
-        setNoOfPax(guest: GuestDetails): GuestBookingRequestBuilder {
-            this.specs.noOfPax = parseInt(guest?.pax || "0");
+        setNoOfPax(noOfPax: number): GuestBookingRequestBuilder {
+            this.specs.noOfPax = noOfPax;
             return this;
         }
-        setNoOfStay(guest: GuestDetails): GuestBookingRequestBuilder {
-            this.specs.noOfStay = parseInt(guest?.stay || "0");
+        setNoOfStay(noOfStay: number): GuestBookingRequestBuilder {
+            this.specs.noOfStay = noOfStay;
             return this;
         }
-        setNightlyPrice(paymentDetails: PaymentDetails): GuestBookingRequestBuilder {
-            this.specs.nightlyPrice = parseFloat(paymentDetails?.amount || "0");
+        setNightlyPrice(nightlyPrice: number): GuestBookingRequestBuilder {
+            this.specs.nightlyPrice = nightlyPrice
             return this;
         }
-        setTotalPayout(paymentDetails: PaymentDetails): GuestBookingRequestBuilder {
-            this.specs.totalPayout = parseFloat(paymentDetails?.totalPayout || "0");
+        setTotalPayout(totalPayout: number): GuestBookingRequestBuilder {
+            this.specs.totalPayout = totalPayout;
             return this;
         }
         setFrom(from: string): GuestBookingRequestBuilder {
             this.specs.from = from;
             return this;
         }
-        setModeOfPayment(paymentDetails: PaymentDetails): GuestBookingRequestBuilder {
-            this.specs.modeOfPayment = paymentDetails?.paymentMode as string;
+        setModeOfPayment(modeOfPayment: string): GuestBookingRequestBuilder {
+            this.specs.modeOfPayment = modeOfPayment;
             return this;
         }
-        setDatePaid(datePaid: ISODateText): GuestBookingRequestBuilder {
+        setDatePaid(datePaid: string): GuestBookingRequestBuilder {
             this.specs.datePaid = (datePaid) 
-                ? moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                // ? moment(`${(datePaid?.year) ? datePaid?.year : moment().format("YYYY")}-${datePaid?.month}-${datePaid?.day}`, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
+                ? moment(datePaid, 'YYYY-MMMM-DD').format("YYYY-MM-DD")
                 : moment().format("YYYY-MM-DD");
             return this;
         }

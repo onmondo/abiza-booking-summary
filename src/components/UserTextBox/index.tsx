@@ -1,34 +1,29 @@
-import { useState } from "react";
 import { GuestDetails } from "../bookingformModal";
 import { SolarUserCircleLinear } from "../icons/usericon";
 import styles from "./textbox.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { setGuestName, setPax, setStay } from "../../redux/ducks/bookingForm";
 
 type ChangeTextRequest = {
     value: GuestDetails
-    onChange: <T>(val: T) => void
 }
 
-export function UserTextBox({ 
-    value,
-    onChange 
-}: ChangeTextRequest) {
-    const [guestName, setGuestName] = useState("");
-    const [pax, setPax] = useState("");
-    const [stay, setStay] = useState("");
+export function UserTextBox({ value }: ChangeTextRequest) {
+    const guestName = useSelector<{ bookingForm: { guestName: string }}>((state) => state.bookingForm.guestName) as string;
+    const noOfPax = useSelector<{ bookingForm: { noOfPax: number }}>((state) => state.bookingForm.noOfPax) as number;
+    const noOfStay = useSelector<{ bookingForm: { noOfStay: number }}>((state) => state.bookingForm.noOfStay) as number;
+    const dispatch = useDispatch();
 
     const handleChangeGuestName = (val: string) => {
-        onChange({ guestName: val})
-        setGuestName(val)
+        dispatch(setGuestName(val))
     }
 
     const handleChangePax = (val: string) => {
-        onChange({ pax: val})
-        setPax(val)
+        dispatch(setPax(parseInt(val)))
     }
     
     const handleChangeStay = (val: string) => {
-        onChange({ stay: val })
-        setStay(val)
+        dispatch(setStay(parseInt(val)))
     }
 
     return (
@@ -44,7 +39,7 @@ export function UserTextBox({
             <input 
                 className={styles.pax}
                 type="number" 
-                value={(pax) ? pax : value.pax}
+                value={(noOfPax) ? noOfPax : value.pax}
                 // maxLength={50} 
                 placeholder="Pax"
                 onChange={(e) => { handleChangePax(e.target.value) }}
@@ -52,8 +47,7 @@ export function UserTextBox({
             <input 
                 className={styles.stay}
                 type="number" 
-                value={(stay) ? stay : value.stay}
-                // value={`${stay} night`}
+                value={(noOfStay) ? noOfStay : value.stay}
                 // maxLength={50} 
                 placeholder="No. stay"
                 onChange={(e) => { handleChangeStay(e.target.value) }}

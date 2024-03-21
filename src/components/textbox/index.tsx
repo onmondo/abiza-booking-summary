@@ -22,7 +22,7 @@ export function TextBox({ value, onChange, placeholder, children }: RemarksText)
             <input
                 className={styles.guest}
                 type="text" 
-                value={(remark) ? remark : value}
+                value={(value) ? value : remark}
                 maxLength={50} 
                 placeholder={placeholder}
                 onChange={(e) => { handleValueChange(e.target.value) }}

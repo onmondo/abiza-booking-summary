@@ -1,3 +1,5 @@
+import { Action } from "./interface";
+
 const NEXTPAGE = "nextpage";
 const PREVPAGE = "prevpage";
 const UPDATELIMIT =  "updatelimit";
@@ -5,6 +7,9 @@ const SETTOTALCOUNT = "setTotalCount";
 const SETCURRENTCOUNT = "setCurrentCount";
 const SETACTIVENEXT = "setActiveNext";
 const SETACTIVEPREV = "setActivePrev";
+export const ADDNEWBOOKING = "addNewBooking";
+export const CLOSEBOOKINGFORM = "closeBookingForm";
+export const UPDATEBOOKING = "updateBooking";
 
 export const nextpage = () => ({
     type: NEXTPAGE
@@ -37,6 +42,19 @@ export const setActivePrev = () => ({
     type: SETACTIVEPREV
 })
 
+export const addNewBooking = () => ({
+    type: ADDNEWBOOKING
+});
+
+export const updateBooking = <T>(booking: T) => ({
+    type: UPDATEBOOKING,
+    value: booking
+});
+
+export const closeBookingForm = () => ({
+    type: CLOSEBOOKINGFORM
+});
+
 const initialState = {
     page: 1,
     limit: 10,
@@ -44,12 +62,10 @@ const initialState = {
     isPrevButtonActive: false,
     totalCount: 0,
     currentCount: 10,
-    totalPages: 1
-}
-
-interface Action<T>{
-    type: string;
-    value: T
+    totalPages: 1,
+    isFormShown: false,
+    selectedBooking: {},
+    newBookingMode: true,
 }
 
 export default function bookingsReducer(state = initialState, action: Action<unknown>) {
@@ -78,6 +94,26 @@ export default function bookingsReducer(state = initialState, action: Action<unk
                 ...state, 
                 totalCount: action.value,
                 totalPages: Math.ceil(parseInt(action.value as string) / state.limit)
+            }
+        case ADDNEWBOOKING:
+            return {
+                ...state,
+                isFormShown: true,
+                selectedBooking: {},
+                newBookingMode: true
+            }
+        case UPDATEBOOKING:
+            return {
+                ...state,
+                isFormShown: true,
+                selectedBooking: action.value,
+                newBookingMode: false
+            }
+        case CLOSEBOOKINGFORM:
+            return {
+                ...state,
+                isFormShown: false,
+                selectedBooking: {}
             }
         default:
             return state;

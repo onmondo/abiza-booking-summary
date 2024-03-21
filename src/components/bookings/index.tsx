@@ -7,7 +7,7 @@ import { Button } from "../button";
 import { TextBox } from "../textbox";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { nextpage, prevpage, setActiveNext, setActivePrev, setTotalCount, updatelimit } from "../../redux/ducks/bookings";
+import { addNewBooking, nextpage, prevpage, setActiveNext, setActivePrev, setTotalCount, updateBooking, updatelimit } from "../../redux/ducks/bookings";
 // import { DateTimePicker } from "../DateTimePicker";
 
 interface SearchBookingRequest {
@@ -33,13 +33,14 @@ export type BookingResponse = {
     totalPayout: number
 }
 
-export function Bookings({ year, month, bookingFormStatus, selectBooking }: SearchBookingRequest) {
+export function Bookings({ year, month }: SearchBookingRequest) {
     const page = useSelector<{ bookings: { page: number }}>((state) => state.bookings.page) as number;
     const totalPages = useSelector<{ bookings: { totalPages: number }}>((state) => state.bookings.totalPages) as number;
     const limit = useSelector<{ bookings: { limit: number }}>((state) => state.bookings.limit) as number;
     const totalBookings = useSelector<{ bookings: { totalCount: number }}>((state) => state.bookings.totalCount) as number;
     const isNextButtonActive = useSelector<{ bookings: { isNextButtonActive: boolean }}>((state) => state.bookings.isNextButtonActive) as boolean;
     const isPrevButtonActive = useSelector<{ bookings: { isPrevButtonActive: boolean }}>((state) => state.bookings.isPrevButtonActive) as boolean;
+    const isFormShown = useSelector<{ bookings: { isFormShown: boolean }}>((state) => state.bookings.isFormShown) as boolean;
     const dispatch = useDispatch();
 
     const [bookings, setBookings] = useState<BookingResponse[]>([])
@@ -92,14 +93,13 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
         fetchBookings();
         // setActivePrevButton(page !== 1);
         // const totalRecords = bookings.length;
-    }, [bookingFormStatus, page, limit])
+    }, [isFormShown, page, limit])
 
     function handleLimitOnchange(val: string) {
         dispatch(updatelimit(parseInt(val)))
     }
 
     function handleNextPage() {
-        
         if (isNextButtonActive) {
             dispatch(nextpage());
             dispatch(setActiveNext());
@@ -107,11 +107,19 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
     }
 
     function handlePrevPage() {
-        
         if (isPrevButtonActive) {
             dispatch(prevpage())
             dispatch(setActivePrev());
         }
+    }
+
+    function handleAddNewBooking(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        e.preventDefault();
+        dispatch(addNewBooking())
+    }
+
+    function handleEditBooking(booking: BookingResponse) {
+        dispatch(updateBooking(booking))
     }
 
     return (
@@ -135,9 +143,8 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                                 setBookingForDeletion(booking._id) 
                                 setShowRemoveModal(!showRemoveModal)
                             }}
-                            updateBooking={(e) => { 
-                                e.preventDefault(); 
-                                selectBooking(booking);
+                            updateBooking={() => {
+                                handleEditBooking(booking)
                             }}
                             guestName={booking.guestName}
                             bookFrom={booking.from}
@@ -174,6 +181,11 @@ export function Bookings({ year, month, bookingFormStatus, selectBooking }: Sear
                     name={"Next"} 
                     isMain={true} 
                     onClick={handleNextPage}
+                />
+                <Button 
+                    name={"Add more"} 
+                    isMain={true} 
+                    onClick={handleAddNewBooking}
                 />
             </section>
         </section>

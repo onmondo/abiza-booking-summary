@@ -1,19 +1,16 @@
 import { useState } from "react";
-import { BookingResponse, Bookings } from "../components/bookings";
-import { Button } from "../components/button";
+import { Bookings } from "../components/bookings";
+import { useSelector } from "react-redux";
 import "./styles/home.css";
 import { BookingForm } from "../components/bookingformModal";
 
 export function Home() {
+    const isFormShown = useSelector<{ bookings: { isFormShown: boolean }}>((state) => state.bookings.isFormShown) as boolean;
     const [showBookingForm, setShowBookingForm] = useState(false);
-    const [selectedBooking, setSelectedBooking] = useState({});
-    const [isNewBooking, setIsNewBooking] = useState(false);
-    // Use context here for toggling the entry and modification form
-    // console.log("showNewBookingForm", showNewBookingForm)
+    // const [selectedBooking, setSelectedBooking] = useState({});
 
-    function handleSelectBooking (booking: BookingResponse) {
-        setIsNewBooking(false);
-        setSelectedBooking(booking);
+    function handleSelectBooking () {
+        // setSelectedBooking(booking);
         setShowBookingForm(!showBookingForm);
     }
 
@@ -27,26 +24,9 @@ export function Home() {
                     selectBooking={handleSelectBooking} 
                 />
             </section>
-            <section id="bookingform" className={`${(showBookingForm) ? "show" : "hide"}`}>
-                <BookingForm 
-                    newBooking={isNewBooking}
-                    isShown={(showBookingForm)} 
-                    booking={selectedBooking as BookingResponse} 
-                    toggleForm={setShowBookingForm}
-                />
+            <section id="bookingform" className={`${(isFormShown) ? "show" : "hide"}`}>
+                <BookingForm />
             </section>
-            <p id="addnewbooking">
-                <Button 
-                    name={"Add more"} 
-                    isMain={true} 
-                    onClick={(e) => { 
-                        e.preventDefault();
-                        setShowBookingForm(!showBookingForm);
-                        setIsNewBooking(true);
-                        setSelectedBooking({});
-                    }}
-                />
-            </p>
         </main>
     )
 }
