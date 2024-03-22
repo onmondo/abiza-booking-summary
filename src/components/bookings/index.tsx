@@ -124,14 +124,17 @@ export function Bookings({ year, month }: SearchBookingRequest) {
 
     return (
         <section className={styles.container}>
-            <RemoveBooking 
-                modalStatus={showRemoveModal}
-                toggleForm={() => { setShowRemoveModal(!showRemoveModal) }} 
-                onClick={() => { 
-                    removeBooking(bookingForDeletion) 
-                    setShowRemoveModal(!showRemoveModal)
-                }} 
-            />
+            <p className={styles.deletemodal}>
+                <RemoveBooking 
+                    modalStatus={showRemoveModal}
+                    toggleForm={() => { setShowRemoveModal(!showRemoveModal) }} 
+                    onClick={() => { 
+                        removeBooking(bookingForDeletion) 
+                        setShowRemoveModal(!showRemoveModal)
+                    }} 
+                />
+            </p>
+
             <ul className={styles.bookinglist}>
             {
                 bookings.map(

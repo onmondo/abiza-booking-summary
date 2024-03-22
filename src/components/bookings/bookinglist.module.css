@@ -2,6 +2,11 @@
 
 }
 
+.deletemodal {
+    display: flex;
+    justify-content: center;
+}
+
 .bookinglist {
     list-style: none;
     padding: 0;
