@@ -10,6 +10,7 @@ const SETACTIVEPREV = "setActivePrev";
 export const ADDNEWBOOKING = "addNewBooking";
 export const CLOSEBOOKINGFORM = "closeBookingForm";
 export const UPDATEBOOKING = "updateBooking";
+const SEARCHBOOKING = "searchBooking";
 
 export const nextpage = () => ({
     type: NEXTPAGE
@@ -55,6 +56,11 @@ export const closeBookingForm = () => ({
     type: CLOSEBOOKINGFORM
 });
 
+export const searchBooking = (searchString: string) => ({
+    type: SEARCHBOOKING,
+    value: searchString
+})
+
 const initialState = {
     page: 1,
     limit: 10,
@@ -66,6 +72,7 @@ const initialState = {
     isFormShown: false,
     selectedBooking: {},
     newBookingMode: true,
+    search: ""
 }
 
 export default function bookingsReducer(state = initialState, action: Action<unknown>) {
@@ -114,6 +121,11 @@ export default function bookingsReducer(state = initialState, action: Action<unk
                 ...state,
                 isFormShown: false,
                 selectedBooking: {}
+            }
+        case SEARCHBOOKING: 
+            return {
+                ...state,
+                search: action.value as string
             }
         default:
             return state;

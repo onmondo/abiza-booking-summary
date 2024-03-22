@@ -24,7 +24,8 @@ export function UserTextBox({ value }: GuestUserName) {
     const dispatch = useDispatch();
     function handleOnChangeBooking(val: string) {
         // onChange(val, "guestName")
-        setGuestName(val)
+        // setGuestName(val)
+        dispatch(setGuestName(val))
     }
 
     function handleChangePax(val: string) {
@@ -43,7 +44,7 @@ export function UserTextBox({ value }: GuestUserName) {
             <SolarUserCircleLinear />
             <input
                 type="text"
-                value={(value.guestName) ? value.guestName : guestName}
+                value={(guestName) ? guestName : value.guestName}
                 maxLength={50} 
                 placeholder="Guest name" 
                 onChange={(e) => { handleOnChangeBooking(e.target.value) }}

@@ -2,12 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BookingRow } from "../bookingrow";
 import styles from "./bookinglist.module.css";
-import { RemoveBooking } from "../deleteBookingModal";
+import { TinyModal } from "../tinyModal";
 import { Button } from "../button";
 import { TextBox } from "../textbox";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addNewBooking, nextpage, prevpage, setActiveNext, setActivePrev, setTotalCount, updateBooking, updatelimit } from "../../redux/ducks/bookings";
+import { addNewBooking, nextpage, prevpage, searchBooking, setActiveNext, setActivePrev, setTotalCount, updateBooking, updatelimit } from "../../redux/ducks/bookings";
+// import { isEmpty } from "lodash";
+import { SolarCardSearchLinear } from "../icons/searchicon";
+import { ackDemoModal } from "../../redux/ducks/dashboard";
 // import { DateTimePicker } from "../DateTimePicker";
 
 interface SearchBookingRequest {
@@ -41,6 +44,7 @@ export function Bookings({ year, month }: SearchBookingRequest) {
     const isNextButtonActive = useSelector<{ bookings: { isNextButtonActive: boolean }}>((state) => state.bookings.isNextButtonActive) as boolean;
     const isPrevButtonActive = useSelector<{ bookings: { isPrevButtonActive: boolean }}>((state) => state.bookings.isPrevButtonActive) as boolean;
     const isFormShown = useSelector<{ bookings: { isFormShown: boolean }}>((state) => state.bookings.isFormShown) as boolean;
+    const forDemo = useSelector<{ dashboard: { forDemo: boolean }}>((state) => state.dashboard.forDemo) as boolean;
     const dispatch = useDispatch();
 
     const [bookings, setBookings] = useState<BookingResponse[]>([])
@@ -124,17 +128,47 @@ export function Bookings({ year, month }: SearchBookingRequest) {
 
     return (
         <section className={styles.container}>
-            <p className={styles.deletemodal}>
-                <RemoveBooking 
+            <div className={styles.modals}>
+                <TinyModal 
+                    label={"Delete Booking?"}
+                    defaultButton={{ isMain: false, label: "Cancel" }}
                     modalStatus={showRemoveModal}
                     toggleForm={() => { setShowRemoveModal(!showRemoveModal) }} 
-                    onClick={() => { 
-                        removeBooking(bookingForDeletion) 
-                        setShowRemoveModal(!showRemoveModal)
-                    }} 
+                >
+                    <Button 
+                        onClick={() => { 
+                            removeBooking(bookingForDeletion) 
+                            setShowRemoveModal(!showRemoveModal)
+                        }} 
+                        name="This will remove the booking" isMain={true} 
+                    />
+                </TinyModal>
+            </div>
+            <div className={styles.modals}>
+                <TinyModal 
+                    label={`Demo Notice`}
+                    description={`Thank you for visiting our app! Please note that this is a demonstration version intended for showcasing purposes only.
+                    
+                    To conserve resources and manage costs, the server powering this app may spin down during periods of inactivity. As a result, you may experience delays in response times, lasting approximately 50 seconds, when accessing certain features.
+                    
+                    We appreciate your understanding and patience. If you encounter any issues or have suggestions for improvement, please feel free to reach out to us. Your feedback helps us enhance the user experience.
+                    
+                    Thank you for your interest and enjoy exploring our demo!`}
+                    defaultButton={{ isMain: true, label: "Proceed?" }}
+                    modalStatus={forDemo}
+                    toggleForm={() => { dispatch(ackDemoModal()) }} 
                 />
-            </p>
-
+            </div>
+            <TextBox 
+                value={""}
+                onChange={val => {
+                    // setRemarks(val)
+                    dispatch(searchBooking(val))
+                }} 
+                placeholder="Search . . ." 
+            >
+                <SolarCardSearchLinear />
+            </TextBox>
             <ul className={styles.bookinglist}>
             {
                 bookings.map(
