@@ -14,7 +14,14 @@ import { isEmpty } from "lodash";
 import { SolarNotebookLinear } from "../icons/noteicon";
 import { useSelector, useDispatch } from "react-redux";
 import { closeBookingForm } from "../../redux/ducks/bookings";
-import { setBookFrom, setCheckIn, setCheckOut, setDatePaid, setGuestName, setPax, setRemarks, setRooms, setStay } from "../../redux/ducks/bookingForm";
+import { 
+    setBookFrom, 
+    setCheckIn, 
+    setCheckOut, 
+    setDatePaid, 
+    setRemarks, 
+    setRooms 
+} from "../../redux/ducks/bookingForm";
 
 export type PaymentDetails = {
     paymentMode?: string
@@ -106,8 +113,18 @@ export function BookingForm() {
         if(!isEmpty(checkOut)) updateBookingRequestBuilder.setCheckout(checkOut);
         if(noOfPax > 0) updateBookingRequestBuilder.setNoOfPax(noOfPax);
         if(noOfStay > 0) updateBookingRequestBuilder.setNoOfStay(noOfStay);
-        if(nightlyPrice > 0) updateBookingRequestBuilder.setNightlyPrice(nightlyPrice);
-        if(totalPayout > 0) updateBookingRequestBuilder.setTotalPayout(totalPayout);
+        if(nightlyPrice > 0) { 
+            if(selectedBooking.noOfPax) updateBookingRequestBuilder.setNoOfPax(selectedBooking.noOfPax);
+            if(selectedBooking.noOfStay) updateBookingRequestBuilder.setNoOfStay(selectedBooking.noOfStay);
+            if(selectedBooking.totalPayout) updateBookingRequestBuilder.setTotalPayout(selectedBooking.totalPayout);
+            updateBookingRequestBuilder.setNightlyPrice(nightlyPrice)
+        }
+        if(totalPayout > 0) { 
+            if(selectedBooking.noOfPax) updateBookingRequestBuilder.setNoOfPax(selectedBooking.noOfPax);
+            if(selectedBooking.noOfStay) updateBookingRequestBuilder.setNoOfStay(selectedBooking.noOfStay);
+            if(selectedBooking.nightlyPrice) updateBookingRequestBuilder.setNightlyPrice(selectedBooking.nightlyPrice);
+            updateBookingRequestBuilder.setTotalPayout(totalPayout) 
+        }
         if(!isEmpty(from)) updateBookingRequestBuilder.setFrom(from);
         if(!isEmpty(modeOfPayment)) updateBookingRequestBuilder.setModeOfPayment(modeOfPayment);
         if(!isEmpty(datePaid)) updateBookingRequestBuilder.setDatePaid(datePaid);
@@ -157,20 +174,6 @@ export function BookingForm() {
                     noOfPax: (selectedBooking.noOfPax) ? selectedBooking.noOfPax : noOfPax,
                     noOfStay: (selectedBooking.noOfPax) ? selectedBooking.noOfStay : noOfStay,
                 }}
-                // onChange={(val, type) => {
-                //     switch(type) {
-                //         case "guestName":
-                //             dispatch(setGuestName(val));
-                //             break;
-                //         case "pax": 
-                //             dispatch(setPax(parseInt(val)));
-                //             break;
-                //         case "stay": 
-                //             dispatch(setStay(parseInt(val)));
-                //             break;
-                //     }
-                    
-                // }}
             />
             <br />
             <BookingFrom 
