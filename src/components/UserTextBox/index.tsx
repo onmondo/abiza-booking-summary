@@ -1,6 +1,8 @@
-import { useState } from "react";
+// import { useState } from "react";
 import styles from "./textbox.module.css";
 import { SolarUserCircleLinear } from "../icons/usericon";
+import { useSelector, useDispatch } from "react-redux";
+import { setGuestName, setPax, setStay } from "../../redux/ducks/bookingForm";
 
 type GuestUserName = {
     value: {
@@ -8,27 +10,32 @@ type GuestUserName = {
         noOfPax: number,
         noOfStay: number
     }
-    onChange: (val: string, field: string) => void
+    // onChange: (val: string, field: string) => void
 }
 
-export function UserTextBox({ value, onChange }: GuestUserName) {
-    console.log(value)
-    const [guestName, setGuestName] = useState("");
-    const [pax, setPax] = useState("");
-    const [stay, setStay] = useState("");
+export function UserTextBox({ value }: GuestUserName) {
+    // const [guestName, setGuestName] = useState("");
+    // const [pax, setPax] = useState("");
+    // const [stay, setStay] = useState("");
+    const guestName = useSelector<{ bookingForm: { guestName: string }}>((state) => state.bookingForm.guestName) as string;
+    const noOfPax = useSelector<{ bookingForm: { noOfPax: number }}>((state) => state.bookingForm.noOfPax) as number;
+    const noOfStay = useSelector<{ bookingForm: { noOfStay: number }}>((state) => state.bookingForm.noOfStay) as number;
+
+    const dispatch = useDispatch();
     function handleOnChangeBooking(val: string) {
-        onChange(val, "guestName")
+        // onChange(val, "guestName")
         setGuestName(val)
     }
 
     function handleChangePax(val: string) {
-        onChange(val, "pax")
-        setPax(val)
+        // onChange(val, "pax")
+        // setPax(val)
+        dispatch(setPax(parseInt(val)))
     }
 
     function handleChangeStay(val: string) {
-        onChange(val, "stay")
-        setStay(val)
+        // onChange(val, "stay")
+        dispatch(setStay(parseInt(val)));
     }
 
     return (
@@ -44,7 +51,7 @@ export function UserTextBox({ value, onChange }: GuestUserName) {
             <input 
                 className={styles.pax}
                 type="number" 
-                value={(pax) ? pax : value.noOfPax}
+                value={(noOfPax) ? noOfPax : value.noOfPax}
                 placeholder="Pax"
                 min={1}
                 max={4}
@@ -54,7 +61,7 @@ export function UserTextBox({ value, onChange }: GuestUserName) {
             <input 
                 className={styles.stay}
                 type="number" 
-                value={(stay) ? stay : value.noOfStay}
+                value={(noOfStay) ? noOfStay : value.noOfStay}
                 placeholder="Stay"
                 min={1}
                 max={20}

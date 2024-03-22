@@ -70,7 +70,6 @@ export default class GuestBookingRequest {
             const specs = this.specs as GuestBooking;
             specs.noOfPax = noOfPax;
             this.specs = specs;
-            console.log("specs", specs)
             return this;
         }
         setNoOfStay(noOfStay: number): GuestBookingRequestBuilder {

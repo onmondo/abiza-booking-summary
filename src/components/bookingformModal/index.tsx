@@ -50,9 +50,6 @@ export function BookingForm() {
     const from = useSelector<{ bookingForm: { from: string }}>((state) => state.bookingForm.from) as string;
     const remarks = useSelector<{ bookingForm: { remarks: string }}>((state) => state.bookingForm.remarks) as string;
 
-    console.log("guestName", guestName)
-    console.log("noOfPax", noOfPax)
-    console.log("noOfStay", noOfStay)
     const options: SelectOption[] = [
         { label: "Please select one...", value: "placeholder" },
         { label: "room1", value: "room1" },
@@ -118,7 +115,6 @@ export function BookingForm() {
 
         const updateBookingRequest = updateBookingRequestBuilder.build();
 
-        console.log("updateBookingRequest", updateBookingRequest.getSpecs())
         try {
             await axios.patch(apiUrl, updateBookingRequest.getSpecs(), {
                 headers: {
@@ -158,23 +154,24 @@ export function BookingForm() {
             <UserTextBox 
                 value={{
                     guestName: (isEmpty(guestName)) ? selectedBooking.guestName : guestName,
-                    noOfPax: (isEmpty(noOfPax)) ? selectedBooking.noOfPax : noOfPax,
-                    noOfStay: (isEmpty(noOfStay)) ? selectedBooking.noOfStay : noOfStay,
+                    noOfPax: (selectedBooking.noOfPax) ? selectedBooking.noOfPax : noOfPax,
+                    noOfStay: (selectedBooking.noOfPax) ? selectedBooking.noOfStay : noOfStay,
                 }}
-                onChange={(val, type) => {
-                    switch(type) {
-                        case "guestName":
-                            dispatch(setGuestName(val));
-                            break;
-                        case "pax": 
-                            dispatch(setPax(parseInt(val)));
-                            break;
-                        case "stay": 
-                            dispatch(setStay(parseInt(val)));
-                            break;
-                    }
+                // onChange={(val, type) => {
+                //     switch(type) {
+                //         case "guestName":
+                //             dispatch(setGuestName(val));
+                //             break;
+                //         case "pax": 
+                //             dispatch(setPax(parseInt(val)));
+                //             break;
+                //         case "stay": 
+                //             dispatch(setStay(parseInt(val)));
+                //             break;
+                //     }
                     
-                }}/>
+                // }}
+            />
             <br />
             <BookingFrom 
                 value={(isEmpty(from)) ? selectedBooking.from : from}

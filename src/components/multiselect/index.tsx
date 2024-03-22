@@ -68,8 +68,9 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
             <SolarBedBroken />
             <h6 className={styles.value}>
                 {
-                    multiple 
-                    ? (
+                    // multiple 
+                    // ? 
+                    (
                         function() {
                             const values = value as SelectOption[];
                             return values.map((v, index) => (
@@ -95,8 +96,8 @@ export function MultiSelect({ multiple, value, onChange, options }: SelectProps)
                             ))                            
                         }
                     )()
-                    :
-                        value?.label
+                    // :
+                        // value?.label
                 }
             </h6>
             <button onClick={clearOptions} className={styles["clear-btn"]}>&times;</button>
